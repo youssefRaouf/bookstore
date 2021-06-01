@@ -283,10 +283,7 @@ public class UserController<SearchResults> {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-
-			System.out.println("in modify");
 			try {
-				System.out.println("access" + access);
 				if (access.equals("manager"))
 					manager.manger.frame.setVisible(true);
 				else {

@@ -30,6 +30,15 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `mydb`.`Author`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Author` (
+`Author_Id` VARCHAR(15) NOT NULL,
+`Name`  VARCHAR(15) NOT NULL,
+  PRIMARY KEY (`Author_Id`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
 -- Table `mydb`.`Book`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Book` (
@@ -41,45 +50,21 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Book` (
   `Threshold` INT NOT NULL,
   `Quantity` INT NOT NULL,
   `Publisher_Name` VARCHAR(15) NOT NULL,
+  `Author_Id` VARCHAR(15) NOT NULL,
   PRIMARY KEY (`ISBN`),
   UNIQUE INDEX `ISBN_UNIQUE` (`ISBN` ASC),
   INDEX `fk_Book_Publisher1_idx` (`Publisher_Name` ASC),
   CONSTRAINT `fk_Book_Publisher1`
     FOREIGN KEY (`Publisher_Name`)
     REFERENCES `mydb`.`Publisher` (`Name`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Author`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Author` (
-  `Name` VARCHAR(15) NOT NULL,
-  PRIMARY KEY (`Name`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Book_has_Author`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Book_has_Author` (
-  `Book_ISBN` VARCHAR(15) NOT NULL,
-  `Author_Name` VARCHAR(15) NOT NULL,
-  PRIMARY KEY (`Book_ISBN`, `Author_Name`),
-  INDEX `fk_Book_has_Author_Author1_idx` (`Author_Name` ASC),
-  INDEX `fk_Book_has_Author_Book1_idx` (`Book_ISBN` ASC),
-  CONSTRAINT `fk_Book_has_Author_Book1`
-    FOREIGN KEY (`Book_ISBN`)
-    REFERENCES `mydb`.`Book` (`ISBN`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Book_has_Author_Author1`
-    FOREIGN KEY (`Author_Name`)
-    REFERENCES `mydb`.`Author` (`Name`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE cascade
+    ON UPDATE cascade,
+  INDEX `fk_Book_author1_idx` (`Author_Id` ASC),
+  CONSTRAINT `fk_Book_author1`
+    FOREIGN KEY (`Author_Id`)
+    REFERENCES `mydb`.`Author` (`Author_Id`)
+    ON DELETE cascade
+    ON UPDATE cascade)
 ENGINE = InnoDB;
 
 
@@ -202,24 +187,6 @@ END
 $$
 DELIMITER ;
 
--- check max number of authors
-
-DELIMITER $$
-
-CREATE TRIGGER Avg_authors
-BEFORE INSERT
-ON Book_has_Author
-FOR EACH ROW
-BEGIN
-  SELECT COUNT(*) INTO @cnt FROM Book_has_Author;
-  IF @cnt >= 999999 THEN
-    CALL raise_error;-- raise an error
-  END IF;
-END
-$$
-DELIMITER ;
-
-
 -- check negativity of book count
 
 DELIMITER $$
@@ -324,44 +291,43 @@ DELIMITER ;
 
 
   
- insert into Publisher values('Gehad','alex','3090366'); 
- insert into Publisher values('name','alex','3090366'); 
- insert into Publisher values('rewan','alex','3090366'); 
+ insert into Publisher values('youssef','alexandria','0120'); 
+ insert into Publisher values('abdelrahman','alexandria','0110'); 
+ insert into Publisher values('ahmed','alexandria','0111'); 
+
+insert into Author values('1','youssef raouf');
+insert into Author values('2','ahmed hamdy'); 
+
+insert into Book values('1' ,'book1',100,'Art', '2021-01-01',10,3 ,'youssef',1);
+insert into Book values('2' ,'book2',200,'Art', '2021-01-01',10,4 ,'youssef',1);
+insert into Book values('3' ,'book3',300,'Art', '2021-01-01',10,5 ,'youssef',1);
+insert into Book values('4' ,'book4',400,'Art', '2021-01-01',10,6 ,'youssef',1);
+insert into Book values('5' ,'book5',500,'Art', '2021-01-01',20,7 ,'youssef',1);
+insert into Book values('6' ,'book6',600,'Art', '2021-01-01',20,8 ,'youssef',2);
+insert into Book values('7' ,'book7',700,'Art', '2021-01-01',20,5 ,'youssef',2);
+insert into Book values('8' ,'book8',800,'Art', '2021-01-01',20,6 ,'youssef',2);
+insert into Book values('9' ,'book9',900,'Art', '2021-01-01',20,3 ,'youssef',2);
+insert into Book values('10' ,'book10',1000,'Art', '2021-01-01',20,4 ,'youssef',2);
+insert into Book values('11' ,'book11',1100,'Art', '2021-01-01',20,5 ,'youssef',2);
+insert into Book values('12' ,'book12',1200,'Art', '2021-01-01',20,6 ,'youssef',2);
 
 
-insert into Book values('1' ,'tiltle',100,'Art', '2016-01-01',10,3 ,'Gehad');
-insert into Book values('2' ,'tiltle2',200,'Art', '2016-01-01',10,4 ,'Gehad');
-insert into Book values('3' ,'tiltle3',300,'Art', '2016-01-01',10,5 ,'Gehad');
-insert into Book values('4' ,'tiltle4',400,'Art', '2016-01-01',10,6 ,'Gehad');
-insert into Book values('5' ,'tiltle5',500,'Art', '2016-01-01',20,7 ,'Gehad');
-insert into Book values('6' ,'tiltle6',600,'Art', '2016-01-01',20,8 ,'Gehad');
-insert into Book values('7' ,'tiltle7',700,'Art', '2016-01-01',20,5 ,'Gehad');
-insert into Book values('8' ,'tiltle8',800,'Art', '2016-01-01',20,6 ,'Gehad');
-insert into Book values('9' ,'tiltle9',900,'Art', '2016-01-01',20,3 ,'Gehad');
-insert into Book values('10' ,'tiltle10',1000,'Art', '2016-01-01',20,4 ,'Gehad');
-insert into Book values('11' ,'tiltle11',1100,'Art', '2016-01-01',20,5 ,'Gehad');
-insert into Book values('12' ,'tiltle12',1200,'Art', '2016-01-01',20,6 ,'Gehad');
+insert into User values ('youssef','youssef','raouf','you@gmail.com','000','000000','address','manager');
+insert into User values ('abdelrahman','abdelrahman','nour','abdelrahman271@gmail.com','000','000000','address','user');
+insert into User values ('abdelrahman','abdelrahman','hagrass','bodyhagrass@gmail.com','000','000000','address','user');
+insert into User values ('ahmed','ahmed','hamdy','ahmedradwan111111@gmail.com','000','000000','address','user');
 
 
-insert into User values ('gehad-fathy','gehad','fathy','gehadfathy99@gmail.com','01207969869','000000','address','user');
-insert into User values ('rewan-alaa','rewan','alaa','rewanalaa99@gmail.com','012000000','000000','address','user');
-insert into User values ('amira','amira','mohamed','amiramohamed99@gmail.com','01207969869','000000','address','user');
-insert into User values ('esraa','esraa','hashih','esraahashish@gmail.com','010','000000','address','user');
-insert into User values ('sherook--','Sherook','hossam','sherookhossam@gmail.com','0111111','000000','address','user');
-insert into User values ('Shadwa--','shadwa','mobdyy','shadwa@gmail.com','222222','000000','address','user');
-insert into User values ('Salma','Salma','abdelaziz','salma@gmail.com','0120777777','000000','address','user');
-insert into User values ('Mayar','mayar','abdelaziz','mayar99@gmail.com','01111111555','000000','address','user');
-
-insert into Purchases values  ('amiramohamed99@gmail.com' ,'2' ,150 ,'2017-05-02') ;
-insert into Purchases values  ('esraahashish@gmail.com' ,'2' ,10 ,'2017-05-02') ;
-insert into Purchases values  ('esraahashish@gmail.com' ,'3' ,20 ,'2017-05-02') ;
-insert into Purchases values  ('gehadfathy99@gmail.com' ,'1' ,1 ,'2017-05-02') ;
-insert into Purchases values  ('gehadfathy99@gmail.com' ,'2' ,2 ,'2017-05-02') ;
-insert into Purchases values  ('gehadfathy99@gmail.com' ,'3' ,3 ,'2017-05-02') ;
-insert into Purchases values  ('mayar99@gmail.com' ,'2' ,300 ,'2017-05-02') ; 
-insert into Purchases values  ('salma@gmail.com' ,'2' ,1 ,'2017-05-02') ; 
-insert into Purchases values  ('shadwa@gmail.com' ,'2' ,1 ,'2017-05-02') ; 
-insert into Purchases values  ('sherookhosam@gmail.com' ,'2' ,1 ,'2017-05-02') ; 
+insert into Purchases values  ('you@gmail.com' ,'2' ,150 ,'2021-06-02') ;
+insert into Purchases values  ('you@gmail.com' ,'3' ,10 ,'2021-06-02') ;
+insert into Purchases values  ('you@gmail.com' ,'1' ,20 ,'2021-06-02') ;
+insert into Purchases values  ('abdelrahman271@gmail.com' ,'1' ,1 ,'2021-06-02') ;
+insert into Purchases values  ('abdelrahman271@gmail.com' ,'2' ,2 ,'2021-06-02') ;
+insert into Purchases values  ('abdelrahman271@gmail.com' ,'3' ,3 ,'2021-06-02') ;
+insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'1' ,300 ,'2021-06-02') ; 
+insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'2' ,1 ,'2021-06-02') ; 
+insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'3' ,1 ,'2021-06-02') ; 
+insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'4' ,1 ,'2021-06-02') ; 
  
 
 SET SQL_MODE=@OLD_SQL_MODE;
