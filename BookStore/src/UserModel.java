@@ -120,7 +120,7 @@ public class UserModel {
 	 * store the result of research in HashMap < isbn,arraylist<string>>
 	 */
 	public void searchForBook(ArrayList<String> attribute, ArrayList<String> value) throws SQLException {
-		
+		System.out.println("hna");
 		books.clear();
 		try{
 		String query ="select * from " + " Book where ";

@@ -232,11 +232,14 @@ public class UserController<SearchResults> {
 				System.out.println("Quantity");
 				System.out.println(mainPage.getQuantity());
 			}
-
+			System.out.println(user);
 			try {
-
-				user.searchForBook(attributes, values);
-				search.setSearchResults(user.getBooks());
+				if (manger != null) {
+					manger.searchForBook(attributes, values);
+				} else {
+					user.searchForBook(attributes, values);
+				}
+				search.setSearchResults(manger==null? user.getBooks():manger.getBooks());
 				search.initialize();
 				search.getFrame().setVisible(true);
 			} catch (SQLException e) {
@@ -283,7 +286,7 @@ public class UserController<SearchResults> {
 							JOptionPane.ERROR_MESSAGE);
 				}
 
-				user.addBook(search.getIsbns());
+				manger.addBook(search.getIsbns());
 				search.getFrame().setVisible(false);
 
 			} catch (SQLException e) {
