@@ -34,10 +34,6 @@ public class SignUpView {
 	private MainView home;
 	
 	JButton btnOk;
-	private JLabel lblCcns;
-	private JLabel lblExpireDates;
-	private JTextField ccns;
-	private JTextField expireDate;
 
 	public SignUpView() {
 		initialize();
@@ -181,77 +177,8 @@ public class SignUpView {
 		gbc_textField_5.gridy = 6;
 		frame.getContentPane().add(shipping_address, gbc_textField_5);
 		shipping_address.setColumns(10);
-
 		
-
-		
-	/*	creditCardNo = new JTextField();
-		creditCardNo.setText("xxxx,yyyy,zzzz");
-		GridBagConstraints gbc_creditCardNo = new GridBagConstraints();
-		gbc_creditCardNo.insets = new Insets(0, 0, 5, 0);
-		gbc_creditCardNo.fill = GridBagConstraints.HORIZONTAL;
-		gbc_creditCardNo.gridx = 4;
-		gbc_creditCardNo.gridy = 3;
-
-		frame.getContentPane().add(creditCardNo, gbc_creditCardNo);
-		creditCardNo.setColumns(10);
-*/
-/*
-		JLabel lblAuthors = new JLabel("Authors");
-		GridBagConstraints gbc_lblAuthors = new GridBagConstraints();
-		gbc_lblAuthors.insets = new Insets(0, 0, 5, 5);
-		gbc_lblAuthors.gridx = 0;
-		gbc_lblAuthors.gridy = 3;
-		frame.getContentPane().add(lblAuthors, gbc_lblAuthors);
-
-		creditCardNo = new JTextField();
-		creditCardNo.setText("xxxx,yyyy,zzzz");
-		GridBagConstraints gbc_txtXxxxyyyyzzzz = new GridBagConstraints();
-		gbc_txtXxxxyyyyzzzz.insets = new Insets(0, 0, 5, 0);
-		gbc_txtXxxxyyyyzzzz.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtXxxxyyyyzzzz.gridx = 4;
-		gbc_txtXxxxyyyyzzzz.gridy = 3;
-
-	*/	//frame.getContentPane().add(creditCardNo, gbc_txtXxxxyyyyzzzz);
-		//creditCardNo.setColumns(10);
-
-		
-		/////////////////////////////////////////////////////////////////
-	
 		btnOk = new JButton("Register ");
-		lblCcns = new JLabel("Ccn(s)");
-		GridBagConstraints gbc_lblCcns = new GridBagConstraints();
-		gbc_lblCcns.insets = new Insets(0, 0, 5, 5);
-		gbc_lblCcns.gridx = 0;
-		gbc_lblCcns.gridy = 7;
-		frame.getContentPane().add(lblCcns, gbc_lblCcns);
-		
-		ccns = new JTextField();
-		ccns.setText("xxx,yyy,zzz,...");
-		GridBagConstraints gbc_textFieldf = new GridBagConstraints();
-		gbc_textFieldf.insets = new Insets(0, 0, 5, 0);
-		gbc_textFieldf.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldf.gridx = 4;
-		gbc_textFieldf.gridy = 7;
-		frame.getContentPane().add(ccns, gbc_textFieldf);
-		ccns.setColumns(10);
-		
-		lblExpireDates = new JLabel("expire dates");
-		GridBagConstraints gbc_lblExpireDates = new GridBagConstraints();
-		gbc_lblExpireDates.insets = new Insets(0, 0, 5, 5);
-		gbc_lblExpireDates.gridx = 0;
-		gbc_lblExpireDates.gridy = 8;
-		frame.getContentPane().add(lblExpireDates, gbc_lblExpireDates);
-		
-		expireDate = new JTextField();
-		expireDate.setText("xxx,yyy,zzz,...");
-		GridBagConstraints gbc_textFieldg = new GridBagConstraints();
-		gbc_textFieldg.insets = new Insets(0, 0, 5, 0);
-		gbc_textFieldg.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldg.gridx = 4;
-		gbc_textFieldg.gridy = 8;
-		frame.getContentPane().add(expireDate, gbc_textFieldg);
-		expireDate.setColumns(10);
 		GridBagConstraints gbc_btnOk = new GridBagConstraints();
 		gbc_btnOk.insets = new Insets(0, 0, 0, 5);
 		gbc_btnOk.gridx = 3;
@@ -259,22 +186,6 @@ public class SignUpView {
 		frame.getContentPane().add(btnOk, gbc_btnOk);
 	
 	
-	}
-
-	public JTextField getCcns() {
-		return ccns;
-	}
-
-	public void setCcns(JTextField ccns) {
-		this.ccns = ccns;
-	}
-
-	public JTextField getExpireDate() {
-		return expireDate;
-	}
-
-	public void setExpireDate(JTextField expireDate) {
-		this.expireDate = expireDate;
 	}
 
 	public JTextField getUser_name() {

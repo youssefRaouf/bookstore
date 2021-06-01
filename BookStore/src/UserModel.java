@@ -31,28 +31,15 @@ public class UserModel {
 	
 	public boolean signUp(String userName, String fName,
 			String lName, String email,String password, String phoneNumber,
-			String shippingAddress,String access,ArrayList<String> ccn,ArrayList<String> expireDate) {
-		System.out.println("enterrrrrrrrrr");
+			String shippingAddress,String access) {
+		System.out.println("enter");
 		try {
 			String query = "insert into " + "User values ("+
            		 userName+", " +fName +" , " +lName + " ,"+
            		 email+", " + password + " , "+phoneNumber + " ," + shippingAddress+" , " + access + " )";
 			 System.out.println("signUp: " + query);    
             bookStore.statement = bookStore.connect.createStatement();
-            bookStore.statement.executeUpdate(query);
-            
-            for(int i = 0 ; i < ccn.size() ; i++)
-             {
-            	 query =  "insert into " + " Credit_card values ( ";
-            	 query += ccn.get(i) + " , " + "\'"  + expireDate.get(i)+"\'"+ " , "+ email + " )";
-            	 System.out.println(query);
-            	 bookStore.statement = bookStore.connect.createStatement();
-                 bookStore.statement.executeUpdate(query); 
-            	 
-            	 System.out.println("c: " + query);
-             }
-            
-                        
+            bookStore.statement.executeUpdate(query);          
          } catch (Exception e ) {
         	e.printStackTrace();
            return false;

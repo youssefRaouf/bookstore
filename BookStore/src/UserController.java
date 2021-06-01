@@ -117,15 +117,8 @@ public class UserController<SearchResults> {
 			String email = signUp.getEmail().getText().length() == 0 ? null : "'" + signUp.getEmail().getText() + "'";
 			String password = signUp.getPassword().getText().length() == 0 ? null
 					: "'" + signUp.getPassword().getText() + "'";
-			String ccns = signUp.getCcns().getText();
-			String expire_dates = signUp.getExpireDate().getText();
-
-			String[] credit_cards = ccns.split(",");
-			String[] expireDates = expire_dates.split(",");
-
 			boolean valid = user.signUp(user_name, first_name, last_name, email, password, phone_number,
-					shipping_address, "'user'", new ArrayList<String>((Arrays.asList(credit_cards))),
-					new ArrayList<String>(Arrays.asList(expireDates)));
+					shipping_address, "'user'");
 			if (!valid) {
 
 				JOptionPane.showMessageDialog(null, "Wrong data!", "Error", JOptionPane.ERROR_MESSAGE);
