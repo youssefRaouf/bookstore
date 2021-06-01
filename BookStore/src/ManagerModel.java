@@ -10,53 +10,41 @@ import java.sql.Statement;
 public class ManagerModel extends UserModel {
 
 	Statement stmt;
-	//Connection connect;
+	// Connection connect;
 
 	public ManagerModel() {
 		super();
 		try {
-			//bookModel.connectToDB();
-			//connect = bookModel.getConnect();
-			
+			// bookModel.connectToDB();
+			// connect = bookModel.getConnect();
+
 			stmt = bookStore.connect.createStatement();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 		ArrayList<String> credit = new ArrayList<String>();
-				credit.add("124");
-				credit.add("125");
-				ArrayList<String> expire = new ArrayList<String>();
-				expire.add("'1995-12-05'");
-				expire.add("'2017-12-06'");
-				/*try {
-					signUp(" 'user' "," 'rana' ", " 'fayez' ", "'eng.roka97@hotmail.com'", " '123456' ", 
-							" '3090366' ", " '35 address' "," 'user' ",credit,expire);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}*/
-				 
+		credit.add("124");
+		credit.add("125");
+		ArrayList<String> expire = new ArrayList<String>();
+		expire.add("'1995-12-05'");
+		expire.add("'2017-12-06'");
+		/*
+		 * try { signUp(" 'user' "," 'rana' ", " 'fayez' ", "'eng.roka97@hotmail.com'",
+		 * " '123456' ", " '3090366' ", " '35 address' "," 'user' ",credit,expire); }
+		 * catch (SQLException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
+
 	}
 
-
-	
-	public boolean addBook(String catagory, String ISBN, int price,
-			String publicationYear, String publisherName, int threshold,
-			int quantity, ArrayList<String> authors, String title) { // / in
-																		// system
-																		// =
-																		// table
-																		// book
-
+	public boolean addBook(String catagory, String ISBN, int price, String publicationYear, String publisherName,
+			int threshold, int quantity, ArrayList<String> authors, String title) {
 		boolean inserted = false;
-		String sqlBook = "insert into Book values (" + ISBN + "," + title
-				+ "," + price + "," + catagory
+		String sqlBook = "insert into Book values (" + ISBN + "," + title + "," + price + "," + catagory
 
-				+ "," + publicationYear + "," + threshold + ","
-				+ quantity + "," + publisherName + ")";
+				+ "," + publicationYear + "," + threshold + "," + quantity + "," + publisherName + ")";
 
 		String sqlAuthor = "insert into Author values (";
 		String sqlHas = "insert into Book_has_Author values (";
@@ -65,8 +53,7 @@ public class ManagerModel extends UserModel {
 			try {
 				String temp = sqlAuthor + authors.get(i) + ")";
 				System.out.println(temp + "  ll");
-				stmt.executeUpdate(sqlAuthor + "\'" + authors.get(i) + "\'"
-						+ ")");
+				stmt.executeUpdate(sqlAuthor + "\'" + authors.get(i) + "\'" + ")");
 
 			} catch (SQLException e) {
 
@@ -86,8 +73,7 @@ public class ManagerModel extends UserModel {
 			}
 			// insert intermediate table for author and book isbn
 			try {
-				stmt.executeUpdate(sqlHas + "" + ISBN + ",\'"
-						+ authors.get(i) + "\')");
+				stmt.executeUpdate(sqlHas + "" + ISBN + ",\'" + authors.get(i) + "\')");
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;
@@ -99,21 +85,19 @@ public class ManagerModel extends UserModel {
 
 	}
 
-	public HashMap<String, Integer> getOrders()
-	{
+	public HashMap<String, Integer> getOrders() {
 		String sql = "select * from Manager_Order";
-		HashMap<String, Integer> map = new  HashMap<>();
-				
+		HashMap<String, Integer> map = new HashMap<>();
+
 		try {
-			System.out.println("queryyyyyyyy " + sql);
+			System.out.println("query " + sql);
 			ResultSet result = stmt.executeQuery(sql);
-			while(result.next())
-			{
+			while (result.next()) {
 				int noCopies = result.getInt("no_of_copies");
 				int orderNumber = result.getInt("OrderID");
 				String isbn = result.getString("Book_ISBN");
 				String data = orderNumber + ":" + noCopies + ":" + isbn;
-				map.put(data, orderNumber);			
+				map.put(data, orderNumber);
 				System.out.println(orderNumber);
 			}
 		} catch (SQLException e) {
@@ -121,12 +105,10 @@ public class ManagerModel extends UserModel {
 		}
 		return map;
 	}
-	
-	
+
 	public boolean addPublisher(String name, String address, String phone) {
 
-		String sql = "insert into Publisher values (" + name + ","
-				+ address + "," + phone + ")";
+		String sql = "insert into Publisher values (" + name + "," + address + "," + phone + ")";
 		try {
 			stmt.executeUpdate(sql);
 			return true;
@@ -136,16 +118,15 @@ public class ManagerModel extends UserModel {
 
 	}
 
-	public boolean modifyBook(ArrayList<Object> attributes,
-			ArrayList<Object> values) {
-		//HashMap<String, ArrayList<String>> books = null; // that's hash map
+	public boolean modifyBook(ArrayList<Object> attributes, ArrayList<Object> values) {
+		// HashMap<String, ArrayList<String>> books = null; // that's hash map
 		Set<String> booksISBN = books.keySet();
 		String sql = "update Book set ";
 
 		for (int i = 0; i < attributes.size(); i++) {
 			sql += attributes.get(i) + " = ";
 			if (values.get(i).getClass() == String.class) {
-				sql +=   values.get(i);
+				sql += values.get(i);
 			} else
 				sql += values.get(i);
 			if (i != attributes.size() - 1)
@@ -168,8 +149,8 @@ public class ManagerModel extends UserModel {
 	}
 
 	public boolean placeOrder(int noCopies, String ISBN) {
-		String sql = "insert into Manager_Order(no_of_copies ,Book_ISBN,confirm) values ("
-				+ noCopies + "," + ISBN + " ," + false + ")";
+		String sql = "insert into Manager_Order(no_of_copies ,Book_ISBN,confirm) values (" + noCopies + "," + ISBN
+				+ " ," + false + ")";
 		try {
 			stmt.executeUpdate(sql);
 			return true;
@@ -181,8 +162,7 @@ public class ManagerModel extends UserModel {
 	}
 
 	public boolean confirmOrder(int orderNumber) {
-		String sql = "select * from Manager_Order where OrderID = "
-				+ orderNumber;
+		String sql = "select * from Manager_Order where OrderID = " + orderNumber;
 		try {
 
 			ResultSet resultSet = stmt.executeQuery(sql);
@@ -196,13 +176,11 @@ public class ManagerModel extends UserModel {
 				String ISBN = resultSet.getString("Book_ISBN");
 				System.out.println("ISBN : " + ISBN);
 
-				String sqlUpdateBook = "update Book  set Quantity =  "
-						+ "Quantity +  " + noCopies + " where ISBN = \'" + ISBN
-						+ "\'";
+				String sqlUpdateBook = "update Book  set Quantity =  " + "Quantity +  " + noCopies + " where ISBN = \'"
+						+ ISBN + "\'";
 				System.out.println(sqlUpdateBook);
 				stmt.executeUpdate(sqlUpdateBook);
-				String deleteOrder = "Delete from Manager_Order where OrderID = "
-						+ orderNumber;
+				String deleteOrder = "Delete from Manager_Order where OrderID = " + orderNumber;
 				stmt.executeUpdate(deleteOrder);
 			}
 			resultSet.close();
@@ -215,10 +193,9 @@ public class ManagerModel extends UserModel {
 
 		return true;
 	}
-    public boolean cancelOrder(int orderNumber)
-    {
-    	String deleteOrder = "Delete from Manager_Order where OrderID = "
-				+ orderNumber;
+
+	public boolean cancelOrder(int orderNumber) {
+		String deleteOrder = "Delete from Manager_Order where OrderID = " + orderNumber;
 		try {
 			stmt.executeUpdate(deleteOrder);
 		} catch (SQLException e) {
@@ -226,22 +203,20 @@ public class ManagerModel extends UserModel {
 			e.printStackTrace();
 			return false;
 		}
-    	return true;
-    }
-    
-	public boolean promoteUser (String email){
-		
-		
-		String sqlUpdateUser = "update User set access =  "
-				+ "\' manager \' "  + " where email = " + email;
+		return true;
+	}
+
+	public boolean promoteUser(String email) {
+
+		String sqlUpdateUser = "update User set access =  " + "\' manager \' " + " where email = " + email;
 		System.out.println(sqlUpdateUser);
 		try {
 			stmt.executeUpdate(sqlUpdateUser);
-			return true ;
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false ;
+			return false;
 		}
-		
+
 	}
 }
