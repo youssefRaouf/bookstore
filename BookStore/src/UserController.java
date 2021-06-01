@@ -52,6 +52,8 @@ public class UserController<SearchResults> {
 		cart.btnRemove.addActionListener(new RemoveItem());
 		JButton searchBtn = mainPage.getBtnGo();
 		searchBtn.addActionListener(new searchListener());
+		JButton logoutBtn = mainPage.getBtnLogout();
+		logoutBtn.addActionListener(new logoutListener ());
 		JButton addToCart = search.getAddButton();
 		addToCart.addActionListener(new AddToCartListener());
 		JButton modifyBtn = search.getModifyButton();
@@ -177,6 +179,17 @@ public class UserController<SearchResults> {
 			}
 			cart.label.setText(cartContents.get(cartContents.size() - 1).get(1));
 			cart.view();
+		}
+	}
+	
+	public class logoutListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			user=null;
+			manager=null;
+			mainPage.getFrame().setVisible(false);
+			home.getFrame().setVisible(true);
 		}
 	}
 

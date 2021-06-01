@@ -26,7 +26,7 @@ public class MainView {
 	private JButton btnGo ;
 	private JButton btnManager ;
 	private JButton cart ;
-	
+	private JButton logout;
 	
 
 	private JTextField txtISBN;
@@ -95,6 +95,9 @@ public class MainView {
 	
 	//================================Button getter ==================================
 
+	public JButton getBtnLogout() {
+		return logout;
+	}
 	
 	public JButton getBtnGo() {
 		return btnGo;
@@ -194,13 +197,13 @@ public class MainView {
 		cart.setBounds(403, 12, 152, 25);
 		frame.getContentPane().add(cart);
 		
-		JButton logOut = new JButton("log out");
-		logOut.addActionListener(new ActionListener() {
+		logout = new JButton("log out");
+		logout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		logOut.setBounds(583, 12, 99, 25);
-		frame.getContentPane().add(logOut);
+		logout.setBounds(583, 12, 99, 25);
+		frame.getContentPane().add(logout);
 		
 		isbnCheckBox = new JCheckBox("ISBN");
 		
