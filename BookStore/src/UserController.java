@@ -163,8 +163,12 @@ public class UserController<SearchResults> {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-
-			ArrayList<ArrayList<String>> cartContents = user.viewCartItems();
+			ArrayList<ArrayList<String>> cartContents;
+			if (user == null) {
+				cartContents = manger.viewCartItems();
+			} else {
+				cartContents = user.viewCartItems();
+			}
 			if (cartContents == null) {
 				JOptionPane.showMessageDialog(cart.frame, "sorry !", "Error", JOptionPane.ERROR_MESSAGE);
 
@@ -232,14 +236,13 @@ public class UserController<SearchResults> {
 				System.out.println("Quantity");
 				System.out.println(mainPage.getQuantity());
 			}
-			System.out.println(user);
 			try {
 				if (manger != null) {
 					manger.searchForBook(attributes, values);
 				} else {
 					user.searchForBook(attributes, values);
 				}
-				search.setSearchResults(manger==null? user.getBooks():manger.getBooks());
+				search.setSearchResults(manger == null ? user.getBooks() : manger.getBooks());
 				search.initialize();
 				search.getFrame().setVisible(true);
 			} catch (SQLException e) {
@@ -282,7 +285,7 @@ public class UserController<SearchResults> {
 					manager.manger.frame.setVisible(true);
 				else {
 
-					JOptionPane.showMessageDialog(null, "u haven't the rights to modifiy !", "Error",
+					JOptionPane.showMessageDialog(null, "you do not have the rights to modifiy!", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				}
 
