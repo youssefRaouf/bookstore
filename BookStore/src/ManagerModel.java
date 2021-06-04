@@ -149,8 +149,7 @@ public class ManagerModel extends UserModel {
 	}
 
 	public boolean placeOrder(int noCopies, String ISBN) {
-		String sql = "insert into Manager_Order(no_of_copies ,Book_ISBN,confirm) values (" + noCopies + "," + ISBN
-				+ " ," + false + ")";
+		String sql = "insert into Manager_Order(no_of_copies ,Book_ISBN) values (" + noCopies + "," + ISBN+")";
 		try {
 			stmt.executeUpdate(sql);
 			return true;
