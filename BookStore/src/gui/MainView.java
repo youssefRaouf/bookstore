@@ -181,14 +181,6 @@ public class MainView {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JButton edit = new JButton("editProfile");
-		edit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		edit.setBounds(270, 12, 108, 25);
-		frame.getContentPane().add(edit);
-		
 	    cart = new JButton("shoppingCart");
 		cart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -276,8 +268,6 @@ public class MainView {
 		
 		 btnManager = new JButton("Manager");
 		 btnManager.setBounds(582, 527, 117, 25);
-		 
-		
 		 
 		btnGo = new JButton("GO");
 		btnGo.setBounds(270, 423, 117, 25);

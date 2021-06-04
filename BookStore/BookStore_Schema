@@ -75,7 +75,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Manager_Order` (
   `no_of_copies` INT NOT NULL,
   `OrderID` INT NOT NULL AUTO_INCREMENT,
   `Book_ISBN` VARCHAR(15) NOT NULL,
-   `confirm` boolean not null,
   PRIMARY KEY (`OrderID`, `Book_ISBN`),
   INDEX `fk_Order_Book1_idx` (`Book_ISBN` ASC),
   CONSTRAINT `fk_Order_Book1`
@@ -84,9 +83,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Manager_Order` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-alter table Manager_Order 
-	 ALTER COLUMN confirm SET DEFAULT false;
-
 
 -- -----------------------------------------------------
 -- Table `mydb`.`User`
@@ -102,29 +98,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`User` (
    `access` VARCHAR(15) NOT NULL,
 
   PRIMARY KEY (`Email`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`User_has_inCart`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`User_has_inCart` (
-  `User_Email` VARCHAR(100) NOT NULL,
-  `Book_ISBN` VARCHAR(15) NOT NULL,
-  `no_of_copies` INT NOT NULL,
-  PRIMARY KEY (`User_Email`, `Book_ISBN`),
-  INDEX `fk_User_has_Book_Book1_idx` (`Book_ISBN` ASC),
-  INDEX `fk_User_has_Book_User1_idx` (`User_Email` ASC),
-  CONSTRAINT `fk_User_has_Book_User1`
-    FOREIGN KEY (`User_Email`)
-    REFERENCES `mydb`.`User` (`Email`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_User_has_Book_Book1`
-    FOREIGN KEY (`Book_ISBN`)
-    REFERENCES `mydb`.`Book` (`ISBN`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -152,46 +125,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Purchases` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`Credit_card`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Credit_card` (
-  `ccn` INT NOT NULL,
-  `Expire_Date` DATE NOT NULL,
-  `User_Email` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`ccn`, `User_Email`),
-  INDEX `fk_Credit_card_User1_idx` (`User_Email` ASC),
-  CONSTRAINT `fk_Credit_card_User1`
-    FOREIGN KEY (`User_Email`)
-    REFERENCES `mydb`.`User` (`Email`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
--- check email
--- alter table User add constraint check_email check (Email like '%_@__%.__%');
-
--- check max number of tuple in book
- DELIMITER $$
-
-CREATE TRIGGER  Max_books
-BEFORE INSERT
-ON Book
-FOR EACH ROW
-BEGIN
-  SELECT COUNT(*) INTO @cnt FROM Book;
-  IF @cnt >= 999999 THEN
-    CALL raise_error;-- raise an error
-  END IF;
-END
-$$
-DELIMITER ;
-
--- check negativity of book count
-
+-- checks negativity of book count
 DELIMITER $$
-
-CREATE TRIGGER negative_constrain BEFORE update ON Book
+CREATE TRIGGER negative_constraint BEFORE update ON Book
 FOR EACH ROW BEGIN
    IF (NEW.Quantity < 0) THEN
          CALL raise_error;-- raise an error
@@ -201,36 +137,30 @@ DELIMITER ;
 
 
 DELIMITER $$
--- check if quantity is less than a threshold
+-- checks if quantity is less than a threshold if it is then make an order for this book with a count of (threshold-new quantity+1)
 CREATE TRIGGER threshold AFTER update ON Book
-
 FOR EACH ROW BEGIN
-
    IF (NEW.Quantity < OLD.Threshold) THEN
          insert into mydb.Manager_Order (no_of_copies , Book_ISBN)
-         values(20 , OLD.ISBN);
+         values(OLD.Threshold-NEW.Quantity+1 , OLD.ISBN);
    END IF;
 END$$
 DELIMITER ;
 
 DELIMITER $$
--- check if quantity is less than a threshold
+-- checks if quantity is less than a threshold if it is then make an order for this book with a count of (threshold-new quantity+1)
 CREATE TRIGGER threshold1 AFTER insert ON Book
-
 FOR EACH ROW BEGIN
-
    IF (NEW.Quantity < new.Threshold) THEN
          insert into mydb.Manager_Order (no_of_copies , Book_ISBN)
-         values(20 , new.ISBN);
+         values(NEW.Threshold-NEW.Quantity+1 , new.ISBN);
    END IF;
 END$$
 DELIMITER ;
 
-
 DELIMITER $$
-
+-- checks if the category of the book being inserted is from our list of categories
 CREATE TRIGGER categoryDomain1 BEFORE insert ON Book
-
 FOR EACH ROW BEGIN
    IF (NEW.Category !='Science' and NEW.Category !='Art' and NEW.Category !='Religion' and 
    NEW.Category != 'History' and NEW.Category != 'Geography') THEN
@@ -241,9 +171,8 @@ DELIMITER ;
 
 
 DELIMITER $$
-
+-- checks if the category of the book being updated is from our list of categories
 CREATE TRIGGER categoryDomain2 BEFORE UPDATE ON Book
-
 FOR EACH ROW BEGIN
    IF (NEW.Category !='Science' and NEW.Category !='Art' and NEW.Category !='Religion' and 
    NEW.Category != 'History' and NEW.Category != 'Geography') THEN
@@ -274,16 +203,14 @@ FOR EACH ROW BEGIN
 END$$
 DELIMITER ;
 
--- DELsIMITER $$
+ DELIMITER $$
+ CREATE TRIGGER confirm_order BEFORE DELETE ON Manager_Order
+ FOR EACH ROW BEGIN
+    update Book set Quantity = OLD.no_of_copies + Quantity
+    where ISBN = OLD.Book_ISBN;
+ END$$
+ DELIMITER ;
 
--- CREATE TRIGGER confirm_order BEFORE DELETE ON Manager_Order
-
--- FOR EACH ROW BEGIN
---    update Book set Quantity = OLD.no_of_copies + Quantity
---    where OLD.Book_ISBN = ISBN;
--- END$$
--- DELIMITER ;
--- 
 
 
 

@@ -11,14 +11,12 @@ import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-import gui.SearchDisplayer;
 import gui.*;
 
 public class UserController<SearchResults> {
 
 	UserModel user;
 	ManagerModel manger;
-
 	HomeView home;
 	SignUpView signUp;
 	MainView mainPage;
@@ -38,7 +36,9 @@ public class UserController<SearchResults> {
 		search = new SearchDisplayer();
 		// searchResult
 		// user = new UserModel();
-
+		cart = new ShoppingCartContents();
+		cart.btnRemove.addActionListener(new RemoveItem());
+		cart.mainPage.addActionListener(new goBackToMainPage());
 		JButton login = home.getLogin();
 		login.addActionListener(new SignInListener());
 
@@ -47,17 +47,14 @@ public class UserController<SearchResults> {
 
 		JButton register = home.getSignup();
 		register.addActionListener(new RegisterListener());
-		cart = new ShoppingCartContents();
 		mainPage.getCart().addActionListener(new ViewCart());
-		cart.btnRemove.addActionListener(new RemoveItem());
 		JButton searchBtn = mainPage.getBtnGo();
 		searchBtn.addActionListener(new searchListener());
 		JButton logoutBtn = mainPage.getBtnLogout();
-		logoutBtn.addActionListener(new logoutListener ());
-		JButton addToCart = search.getAddButton();
-		addToCart.addActionListener(new AddToCartListener());
+		logoutBtn.addActionListener(new logoutListener());
 		JButton modifyBtn = search.getModifyButton();
 		modifyBtn.addActionListener(new ModifyListener());
+		search.getMainPageButton().addActionListener(new goBackToMainPage());
 
 	}
 
@@ -148,9 +145,9 @@ public class UserController<SearchResults> {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (!cart.Items.getSelectedItem().equals("Purchaces")) {
-				System.out.println("lol");
-			}
+			search.removeIsbn(cart.list.getSelectedIndex());
+			cart.items = new ArrayList(search.getIsbns());
+			cart.list.setListData(cart.items.toArray());
 		}
 	}
 
@@ -158,36 +155,19 @@ public class UserController<SearchResults> {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			ArrayList<ArrayList<String>> cartContents;
-			if (user == null) {
-				cartContents = manger.viewCartItems();
-			} else {
-				cartContents = user.viewCartItems();
-			}
-			if (cartContents == null) {
-				JOptionPane.showMessageDialog(cart.frame, "sorry !", "Error", JOptionPane.ERROR_MESSAGE);
-
-			}
-
-			cart.Items.addItem("Purchaces");
-			for (int i = 0; i < cartContents.size() - 1; i++) {
-				System.out.println("lol" + cartContents.get(0));
-				ArrayList<String> book = new ArrayList<String>();
-				String elemet = "Title: " + cartContents.get(i).get(0) + " Price: " + cartContents.get(i).get(1);
-				cart.Items.addItem(elemet);
-
-			}
-			cart.label.setText(cartContents.get(cartContents.size() - 1).get(1));
-			cart.view();
+			cart.items = new ArrayList(search.getIsbns());
+			cart.list.setListData(cart.items.toArray());
+			cart.getFrame().setVisible(true);
+			mainPage.getFrame().setVisible(false);
 		}
 	}
-	
+
 	public class logoutListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			user=null;
-			manager=null;
+			user = null;
+			manager = null;
 			mainPage.getFrame().setVisible(false);
 			home.getFrame().setVisible(true);
 		}
@@ -251,6 +231,7 @@ public class UserController<SearchResults> {
 				search.setSearchResults(manger == null ? user.getBooks() : manger.getBooks());
 				search.initialize();
 				search.getFrame().setVisible(true);
+				mainPage.getFrame().setVisible(false);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -259,20 +240,18 @@ public class UserController<SearchResults> {
 		}
 	}
 
-	private class AddToCartListener implements ActionListener {
+	private class goBackToMainPage implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-
-			System.out.println("in action listern");
 			try {
+				if (search.getFrame() != null)
+					search.getFrame().setVisible(false);
+				if (cart.getFrame() != null)
+					cart.getFrame().setVisible(false);
+				mainPage.getFrame().setVisible(true);
+			} catch (Error e) {
 
-				user.addBook(search.getIsbns());
-				search.getFrame().setVisible(false);
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 
 		}
@@ -283,22 +262,16 @@ public class UserController<SearchResults> {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			try {
-				if (access.equals("manager"))
-					manager.manger.frame.setVisible(true);
-				else {
+			if (access.equals("manager"))
+				manager.manger.frame.setVisible(true);
+			else {
 
-					JOptionPane.showMessageDialog(null, "you do not have the rights to modifiy!", "Error",
-							JOptionPane.ERROR_MESSAGE);
-				}
-
-				manger.addBook(search.getIsbns());
-				search.getFrame().setVisible(false);
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "you do not have the rights to modifiy!", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
+
+//				manger.addBook(search.getIsbns());
+			search.getFrame().setVisible(false);
 
 		}
 
