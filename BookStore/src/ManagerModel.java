@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+
+import javax.swing.JOptionPane;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,90 +18,39 @@ public class ManagerModel extends UserModel {
 	public ManagerModel() {
 		super();
 		try {
-			// bookModel.connectToDB();
-			// connect = bookModel.getConnect();
-
 			stmt = bookStore.connect.createStatement();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		ArrayList<String> credit = new ArrayList<String>();
-		credit.add("124");
-		credit.add("125");
-		ArrayList<String> expire = new ArrayList<String>();
-		expire.add("'1995-12-05'");
-		expire.add("'2017-12-06'");
-		/*
-		 * try { signUp(" 'user' "," 'rana' ", " 'fayez' ", "'eng.roka97@hotmail.com'",
-		 * " '123456' ", " '3090366' ", " '35 address' "," 'user' ",credit,expire); }
-		 * catch (SQLException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
-
 	}
 
-	public boolean addBook(String catagory, String ISBN, int price, String publicationYear, String publisherName,
-			int threshold, int quantity, ArrayList<String> authors, String title) {
-		boolean inserted = false;
-		String sqlBook = "insert into Book values (" + ISBN + "," + title + "," + price + "," + catagory
-
-				+ "," + publicationYear + "," + threshold + "," + quantity + "," + publisherName + ")";
-
-		String sqlAuthor = "insert into Author values (";
-		String sqlHas = "insert into Book_has_Author values (";
-		for (int i = 0; i < authors.size(); i++) {
-			// insert authors
-			try {
-				String temp = sqlAuthor + authors.get(i) + ")";
-				System.out.println(temp + "  ll");
-				stmt.executeUpdate(sqlAuthor + "\'" + authors.get(i) + "\'" + ")");
-
-			} catch (SQLException e) {
-
-				e.printStackTrace();
-				return false;
-			}
-			// insert book tuple
-			try {
-				if (!inserted) {
-					System.out.println(sqlBook);
-					stmt.executeUpdate(sqlBook);
-					inserted = true;
-				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-				return false;
-			}
-			// insert intermediate table for author and book isbn
-			try {
-				stmt.executeUpdate(sqlHas + "" + ISBN + ",\'" + authors.get(i) + "\')");
-			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
-			}
-
+	public void addBook(String catagory, String string, String publicationYear, String publisherName, String string2,
+			String string3, String author_id, String title) {
+		String query = "insert into Book(Title, Price ,Category , Publication_Year ,Threshold , Quantity ,Publisher_Name,Author_Id) values ("
+				+ '"' + title + '"' + "," + string + "," + '"' + catagory + '"' + "," + '"' + publicationYear + '"'
+				+ "," + string2 + "," + string3 + "," + '"' + publisherName + '"' + "," + '"' + author_id + '"' + ")";
+		try {
+			System.out.println(query);
+			stmt.executeUpdate(query);
+			JOptionPane.showMessageDialog(null, "Book inserted successfully");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "book insertion failed with error message: " + e.getMessage());
 		}
-
-		return true;
-
 	}
 
 	public HashMap<String, Integer> getOrders() {
 		String sql = "select * from Manager_Order";
 		HashMap<String, Integer> map = new HashMap<>();
-
 		try {
-			System.out.println("query " + sql);
 			ResultSet result = stmt.executeQuery(sql);
 			while (result.next()) {
 				int noCopies = result.getInt("no_of_copies");
 				int orderNumber = result.getInt("OrderID");
 				String isbn = result.getString("Book_ISBN");
-				String data = orderNumber + ":" + noCopies + ":" + isbn;
+				String data = "Book Isbn: " + isbn + "  no. of copies: " + noCopies;
 				map.put(data, orderNumber);
-				System.out.println(orderNumber);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -106,115 +58,76 @@ public class ManagerModel extends UserModel {
 		return map;
 	}
 
-	public boolean addPublisher(String name, String address, String phone) {
-
-		String sql = "insert into Publisher values (" + name + "," + address + "," + phone + ")";
-		try {
-			stmt.executeUpdate(sql);
-			return true;
-		} catch (SQLException e) {
-			return false;
-		}
-
-	}
-
-	public boolean modifyBook(ArrayList<Object> attributes, ArrayList<Object> values) {
-		// HashMap<String, ArrayList<String>> books = null; // that's hash map
-		Set<String> booksISBN = books.keySet();
+	public void modifyBook(ArrayList<Object> attributes, ArrayList<Object> values) {
 		String sql = "update Book set ";
-
-		for (int i = 0; i < attributes.size(); i++) {
-			sql += attributes.get(i) + " = ";
+		for (int i = 1; i < attributes.size(); i++) {
+			sql += attributes.get(i) + " = '";
 			if (values.get(i).getClass() == String.class) {
 				sql += values.get(i);
 			} else
 				sql += values.get(i);
-			if (i != attributes.size() - 1)
-				sql += " ,";
-
-		}
-		sql += " where ";
-		Iterator<String> iterator = booksISBN.iterator();
-		int count = 0;
-		while (iterator.hasNext()) {
-			count++;
-			String setElement = iterator.next();
-			sql += "ISBN = " + setElement;
-			if (count != booksISBN.size()) {
-				sql += " or ";
+			if (i != attributes.size() - 1) {
+				sql += "' ,";
+			} else {
+				sql += "'";
 			}
 		}
-		return true;
+		sql += " where ISBN =" + values.get(0);
+		try {
+			stmt.executeUpdate(sql);
+			JOptionPane.showMessageDialog(null, "Book updated successfully");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "book update failed with error message: " + e.getMessage());
+		}
 
 	}
 
 	public boolean placeOrder(int noCopies, String ISBN) {
-		String sql = "insert into Manager_Order(no_of_copies ,Book_ISBN) values (" + noCopies + "," + ISBN+")";
+		String sql = "insert into Manager_Order(no_of_copies ,Book_ISBN) values (" + noCopies + "," + ISBN + ")";
 		try {
 			stmt.executeUpdate(sql);
+			JOptionPane.showMessageDialog(null, "placing order succeeded");
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
+			JOptionPane.showMessageDialog(null, "placing order failed with error message: " + e.getMessage());
 		}
-
+		return false;
 	}
 
-	public boolean confirmOrder(int orderNumber) {
-		String sql = "select * from Manager_Order where OrderID = " + orderNumber;
+	public void confirmOrder(int orderNumber) {
 		try {
-
-			ResultSet resultSet = stmt.executeQuery(sql);
-
-			if (resultSet.next()) {
-				System.out.println("*****************");
-
-				int noCopies = resultSet.getInt("no_of_copies");
-				System.out.println("copies " + noCopies);
-
-				String ISBN = resultSet.getString("Book_ISBN");
-				System.out.println("ISBN : " + ISBN);
-
-				String sqlUpdateBook = "update Book  set Quantity =  " + "Quantity +  " + noCopies + " where ISBN = \'"
-						+ ISBN + "\'";
-				System.out.println(sqlUpdateBook);
-				stmt.executeUpdate(sqlUpdateBook);
-				String deleteOrder = "Delete from Manager_Order where OrderID = " + orderNumber;
-				stmt.executeUpdate(deleteOrder);
-			}
-			resultSet.close();
+			String deleteOrder = "Delete from Manager_Order where OrderID = " + orderNumber;
+			System.out.println(deleteOrder);
+			stmt.executeUpdate(deleteOrder);
+			JOptionPane.showMessageDialog(null, "order confirm succeeded");
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("catchh   ");
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "order confirm failed with error message: " + e.getMessage());
 		}
-
-		return true;
 	}
 
-	public boolean cancelOrder(int orderNumber) {
+	public void cancelOrder(int orderNumber) {
 		String deleteOrder = "Delete from Manager_Order where OrderID = " + orderNumber;
 		try {
 			stmt.executeUpdate(deleteOrder);
+			JOptionPane.showMessageDialog(null, "deleting order succeeded");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
+			JOptionPane.showMessageDialog(null, "deleting order failed with error message: " + e.getMessage());
 		}
-		return true;
 	}
 
-	public boolean promoteUser(String email) {
+	public void promoteUser(String email) {
 
-		String sqlUpdateUser = "update User set access =  " + "\' manager \' " + " where email = " + email;
+		String sqlUpdateUser = "update User set access =  " + "\'manager\' " + " where email = " + email;
 		System.out.println(sqlUpdateUser);
 		try {
 			stmt.executeUpdate(sqlUpdateUser);
-			return true;
+			JOptionPane.showMessageDialog(null, "user promotion succeeded");
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
+			JOptionPane.showMessageDialog(null, "user promotion failed with error message: " + e.getMessage());
 		}
 
 	}

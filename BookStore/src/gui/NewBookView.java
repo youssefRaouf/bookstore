@@ -1,6 +1,5 @@
 package gui;
 
-
 import javax.swing.JFrame;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
@@ -23,7 +22,9 @@ public class NewBookView {
 	JTextField textField_4;
 	JTextField textField_5;
 	JTextField textField_6;
+	JLabel lblPublisher;
 	JLabel lblAuthors;
+	JLabel lblPublicationYear;
 	JLabel lblNewLabel;
 	private JLabel lblPrice;
 	private JLabel lblCategory;
@@ -44,7 +45,7 @@ public class NewBookView {
 	private void initialize() {
 
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 600, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0, 0 };
@@ -54,7 +55,7 @@ public class NewBookView {
 				Double.MIN_VALUE };
 		frame.getContentPane().setLayout(gridBagLayout);
 
-		lblNewLabel = new JLabel("ISBN");
+		lblNewLabel = new JLabel("ISBN of the book needs to be updated");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 0;
@@ -86,7 +87,7 @@ public class NewBookView {
 		frame.getContentPane().add(textField_1, gbc_textField_1);
 		textField_1.setColumns(10);
 
-		JLabel lblPublisher = new JLabel("Publisher_Name");
+		lblPublisher = new JLabel("Publisher_Name");
 		GridBagConstraints gbc_lblPublisher = new GridBagConstraints();
 		gbc_lblPublisher.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPublisher.gridx = 0;
@@ -103,7 +104,7 @@ public class NewBookView {
 		frame.getContentPane().add(textField_2, gbc_textField_2);
 		textField_2.setColumns(10);
 
-		lblAuthors = new JLabel("Authors");
+		lblAuthors = new JLabel("author_id");
 		GridBagConstraints gbc_lblAuthors = new GridBagConstraints();
 		gbc_lblAuthors.insets = new Insets(0, 0, 5, 5);
 		gbc_lblAuthors.gridx = 0;
@@ -111,7 +112,6 @@ public class NewBookView {
 		frame.getContentPane().add(lblAuthors, gbc_lblAuthors);
 
 		txtXxxxyyyyzzzz = new JTextField();
-		txtXxxxyyyyzzzz.setText("xxxx,yyyy,zzzz");
 		GridBagConstraints gbc_txtXxxxyyyyzzzz = new GridBagConstraints();
 		gbc_txtXxxxyyyyzzzz.insets = new Insets(0, 0, 5, 0);
 		gbc_txtXxxxyyyyzzzz.fill = GridBagConstraints.HORIZONTAL;
@@ -121,7 +121,7 @@ public class NewBookView {
 		frame.getContentPane().add(txtXxxxyyyyzzzz, gbc_txtXxxxyyyyzzzz);
 		txtXxxxyyyyzzzz.setColumns(10);
 
-		JLabel lblPublicationYear = new JLabel("publication year");
+		lblPublicationYear = new JLabel("publication year");
 		GridBagConstraints gbc_lblPublicationYear = new GridBagConstraints();
 		gbc_lblPublicationYear.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPublicationYear.gridx = 0;
@@ -206,7 +206,7 @@ public class NewBookView {
 		frame.getContentPane().add(textField_7, gbc_textField_7);
 		textField_7.setColumns(10);
 
-		btnOk = new JButton("OK");
+		btnOk = new JButton("ADD BOOK");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -217,7 +217,7 @@ public class NewBookView {
 		gbc_btnOk.gridx = 3;
 		gbc_btnOk.gridy = 10;
 		btnOk.setVisible(false);
-		
+
 		btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

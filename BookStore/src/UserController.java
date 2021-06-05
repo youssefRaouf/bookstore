@@ -19,26 +19,27 @@ public class UserController<SearchResults> {
 	ManagerModel manger;
 	HomeView home;
 	SignUpView signUp;
+	CheckoutView checkoutPage;
 	MainView mainPage;
 	String access;
 	ManagerController manager;
+	JButton mainPageBtn;
 	ShoppingCartContents cart;
 	SearchDisplayer search;
 
 	public UserController() {
-		System.out.println("in controller constructor");
 		home = new HomeView();
-
 		manger = new ManagerModel();
-
 		signUp = new SignUpView();
 		mainPage = new MainView();
 		search = new SearchDisplayer();
-		// searchResult
-		// user = new UserModel();
+		checkoutPage = new CheckoutView();
+		checkoutPage.btnOk.addActionListener(new checkoutListener());
 		cart = new ShoppingCartContents();
 		cart.btnRemove.addActionListener(new RemoveItem());
+		cart.checkOutButton.addActionListener(new goToCheckoutListener());
 		cart.mainPage.addActionListener(new goBackToMainPage());
+		checkoutPage.mainPage.addActionListener(new goBackToMainPage());
 		JButton login = home.getLogin();
 		login.addActionListener(new SignInListener());
 
@@ -52,8 +53,8 @@ public class UserController<SearchResults> {
 		searchBtn.addActionListener(new searchListener());
 		JButton logoutBtn = mainPage.getBtnLogout();
 		logoutBtn.addActionListener(new logoutListener());
-		JButton modifyBtn = search.getModifyButton();
-		modifyBtn.addActionListener(new ModifyListener());
+		JButton mngBtn = mainPage.getBtnManager();
+		mngBtn.addActionListener(new manageListener());
 		search.getMainPageButton().addActionListener(new goBackToMainPage());
 
 	}
@@ -72,10 +73,8 @@ public class UserController<SearchResults> {
 				password = "\'" + password + "\'";
 			}
 			access = manger.login(password, email);
-			System.out.println(":" + access + ":");
 			if (access == null) {
-				System.out.println(access + "  ddddddd ");
-				JOptionPane.showMessageDialog(null, "Empty Email or password !", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "wrong Email or password !", "Error", JOptionPane.ERROR_MESSAGE);
 			} else if (access.equals("user")) {
 				mainPage.setAccess("user");
 				user = (UserModel) manger;
@@ -85,6 +84,8 @@ public class UserController<SearchResults> {
 			} else if (access.equals("manager")) {
 				mainPage.setAccess("manager");
 				manager = new ManagerController(manger);
+				mainPageBtn = manager.mainPageBtn();
+				mainPageBtn.addActionListener(new goBackToMainPage());
 				home.getFrame().setVisible(false);
 				mainPage.view();
 
@@ -146,8 +147,7 @@ public class UserController<SearchResults> {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			search.removeIsbn(cart.list.getSelectedIndex());
-			cart.items = new ArrayList(search.getIsbns());
-			cart.list.setListData(cart.items.toArray());
+			cart.setList(search.getIsbns());
 		}
 	}
 
@@ -155,8 +155,7 @@ public class UserController<SearchResults> {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			cart.items = new ArrayList(search.getIsbns());
-			cart.list.setListData(cart.items.toArray());
+			cart.setList(search.getIsbns());
 			cart.getFrame().setVisible(true);
 			mainPage.getFrame().setVisible(false);
 		}
@@ -183,44 +182,30 @@ public class UserController<SearchResults> {
 			if (mainPage.getIsbnCheckBox().isSelected()) {
 				attributes.add("ISBN");
 				values.add(mainPage.getISBN());
-				System.out.println("ISBN");
-				System.out.println(mainPage.getISBN());
 			}
 			if (mainPage.getChckbxCatagory().isSelected()) {
 				attributes.add("Category");
 				values.add(mainPage.getCatagory());
-				System.out.println("Category");
-				System.out.println(mainPage.getCatagory());
 			}
 			if (mainPage.getChckbxPrice().isSelected()) {
 				attributes.add("Price");
 				values.add(mainPage.getPrice());
-				System.out.println("price");
-				System.out.println(mainPage.getPrice());
 			}
 			if (mainPage.getChckbxPublicationYear().isSelected()) {
 				attributes.add("Publication_Year");
 				values.add(mainPage.getYear());
-				System.out.println("Publication_Year");
-				System.out.println(mainPage.getYear());
 			}
 			if (mainPage.getChckbxPublisherName().isSelected()) {
 				attributes.add("Publisher_Name");
 				values.add(mainPage.getPublisher());
-				System.out.println("Publisher");
-				System.out.println(mainPage.getPublisher());
-
 			}
 			if (mainPage.getChckbxTitle().isSelected()) {
 				attributes.add("Title");
 				values.add(mainPage.getTitle());
-
 			}
 			if (mainPage.getChckbxQuantity().isSelected()) {
 				attributes.add("Quantity");
 				values.add(mainPage.getQuantity());
-				System.out.println("Quantity");
-				System.out.println(mainPage.getQuantity());
 			}
 			try {
 				if (manger != null) {
@@ -244,21 +229,12 @@ public class UserController<SearchResults> {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			try {
-				if (search.getFrame() != null)
-					search.getFrame().setVisible(false);
-				if (cart.getFrame() != null)
-					cart.getFrame().setVisible(false);
-				mainPage.getFrame().setVisible(true);
-			} catch (Error e) {
-
-			}
-
+			navigateToMainPage();
 		}
 
 	}
 
-	private class ModifyListener implements ActionListener {
+	private class manageListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -266,15 +242,56 @@ public class UserController<SearchResults> {
 				manager.manger.frame.setVisible(true);
 			else {
 
-				JOptionPane.showMessageDialog(null, "you do not have the rights to modifiy!", "Error",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "you are not a manager!", "Error", JOptionPane.ERROR_MESSAGE);
 			}
-
-//				manger.addBook(search.getIsbns());
-			search.getFrame().setVisible(false);
-
+			mainPage.getFrame().setVisible(false);
 		}
 
+	}
+
+	private class checkoutListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if (user != null) {
+				user.checkout(search.getIsbns(), user.email);
+			} else {
+				manager.model.checkout(search.getIsbns(), manager.model.email);
+			}
+			search.emptyIsbns();
+			navigateToMainPage();
+		}
+
+	}
+
+	private class goToCheckoutListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if (search.getIsbns().size() > 0) {
+				cart.getFrame().setVisible(false);
+				checkoutPage.getFrame().setVisible(true);
+			} else {
+				JOptionPane.showMessageDialog(null, "your cart is empty");
+			}
+		}
+
+	}
+
+	private void navigateToMainPage() {
+		try {
+			if (search.getFrame() != null)
+				search.getFrame().setVisible(false);
+			if (cart.getFrame() != null)
+				cart.getFrame().setVisible(false);
+			if (checkoutPage.getFrame() != null) {
+				checkoutPage.getFrame().setVisible(false);
+			}
+			manager.navigateToMainPage();
+			mainPage.getFrame().setVisible(true);
+		} catch (Error e) {
+
+		}
 	}
 
 }

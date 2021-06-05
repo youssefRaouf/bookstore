@@ -24,10 +24,9 @@ public class ManagerView {
 	public NewBookView newBook = new NewBookView();
 	public JButton promoteButton;
 	public JButton placeOderButton;
+	public JButton mainPage;
 	public JComboBox cancelOrderBox;
 	public JComboBox confirmOrderBox;
-	public JButton addPublisherBtn;
-
 
 	/**
 	 * Create the application.
@@ -41,7 +40,7 @@ public class ManagerView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 600, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -49,6 +48,15 @@ public class ManagerView {
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				newBook.btnOk.setVisible(true);
+				newBook.btnUpdate.setVisible(false);
+				newBook.lblAuthors.setVisible(true);
+				newBook.textField.setVisible(false);
+				newBook.txtXxxxyyyyzzzz.setVisible(true);
+				newBook.lblNewLabel.setVisible(false);
+				newBook.textField_2.setVisible(true);
+                newBook.textField_3.setVisible(true);
+                newBook.lblPublicationYear.setVisible(true);
+                newBook.lblPublisher.setVisible(true);
 				newBook.view();
 
 			}
@@ -74,21 +82,25 @@ public class ManagerView {
 		JButton modifyBook = new JButton("modify book");
 		modifyBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				newBook.txtXxxxyyyyzzzz.setVisible(false);;
+				newBook.btnOk.setVisible(false);
+				newBook.textField.setVisible(true);
+				newBook.lblNewLabel.setVisible(true);
+				newBook.txtXxxxyyyyzzzz.setVisible(false);
 				newBook.btnUpdate.setVisible(true);
 				newBook.lblAuthors.setVisible(false);
-				newBook.lblNewLabel.setVisible(false);
-				newBook.textField.setVisible(false);
+				newBook.textField_2.setVisible(false);
+                newBook.textField_3.setVisible(false);
+                newBook.lblPublicationYear.setVisible(false);
+                newBook.lblPublisher.setVisible(false);
 				newBook.view();
 			}
 		});
 		modifyBook.setBounds(232, 36, 157, 25);
 		frame.getContentPane().add(modifyBook);
 
-		JButton btnReports = new JButton("Reports");
-		btnReports.setBounds(10, 173, 159, 25);
-		frame.getContentPane().add(btnReports);
+		mainPage = new JButton("go back to main page");
+		mainPage.setBounds(10, 173, 159, 25);
+		frame.getContentPane().add(mainPage);
 
 		JLabel lblManagerPrivilage = new JLabel("Manager Privilage");
 		lblManagerPrivilage.setBackground(Color.BLACK);
@@ -96,7 +108,7 @@ public class ManagerView {
 		frame.getContentPane().add(lblManagerPrivilage);
 		
 		cancelOrderBox = new JComboBox();
-		cancelOrderBox.setBounds(312, 87, 89, 20);
+		cancelOrderBox.setBounds(314, 87, 200, 30);
 		frame.getContentPane().add(cancelOrderBox);
 		
 		JLabel lblCancelOrder = new JLabel("Cancel Order ");
@@ -108,16 +120,11 @@ public class ManagerView {
 		frame.getContentPane().add(lblConfirmOrder);
 		
 		confirmOrderBox = new JComboBox();
-		confirmOrderBox.setBounds(312, 139, 89, 20);
+		confirmOrderBox.setBounds(314, 139, 200, 30);
 		confirmOrderBox.addItem("OrdersList");
 		cancelOrderBox.addItem("OrdersList");
 
 		frame.getContentPane().add(confirmOrderBox);
-		
-		addPublisherBtn = new JButton("Add Publisher");
-		
-		addPublisherBtn.setBounds(12, 209, 157, 23);
-		frame.getContentPane().add(addPublisherBtn);
 	}
 
 	public JButton getOkButton() {
@@ -128,7 +135,7 @@ public class ManagerView {
 	public String getISBN() {
 		try {
 
-			return "\'" + newBook.textField.getText() + "\'";
+			return newBook.textField.getText();
 		} catch (Exception e) {
 			return null;
 		}
@@ -137,7 +144,7 @@ public class ManagerView {
 	public String getTitle() {
 		try {
 
-			return "\'" + newBook.textField_1.getText() + "\'";
+			return  newBook.textField_1.getText();
 		} catch (Exception e) {
 			return null;
 		}
@@ -146,7 +153,7 @@ public class ManagerView {
 	public String getPblisherName() {
 		try {
 
-			return "\'" + newBook.textField_2.getText() + "\'";
+			return newBook.textField_2.getText();
 		} catch (Exception e) {
 			return null;
 		}
@@ -165,26 +172,26 @@ public class ManagerView {
 
 		try {
 
-			return "\'" + newBook.textField_3.getText() + "\'";
+			return newBook.textField_3.getText();
 		} catch (Exception e) {
 			return null;
 		}
 
 	}
 
-	public Integer getThreshold() {
+	public String getThreshold() {
 		try {
 
-			return Integer.parseInt(newBook.textField_7.getText());
+			return newBook.textField_7.getText();
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
-	public Integer getPrice() {
+	public String getPrice() {
 		try {
 
-			return Integer.parseInt(newBook.textField_4.getText());
+			return newBook.textField_4.getText();
 		} catch (Exception e) {
 			return null;
 		}
@@ -193,16 +200,16 @@ public class ManagerView {
 	public String getCategory() {
 		try {
 
-			return "\'" + newBook.textField_5.getText() + "\'";
+			return newBook.textField_5.getText();
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
-	public Integer getQuantity() {
+	public String getQuantity() {
 		try {
 
-			return Integer.parseInt(newBook.textField_6.getText());
+			return newBook.textField_6.getText();
 		} catch (Exception e) {
 			return null;
 		}

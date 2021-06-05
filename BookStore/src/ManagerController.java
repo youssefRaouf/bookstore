@@ -22,7 +22,6 @@ public class ManagerController {
 	ManagerModel model;
 
 	public ManagerController(ManagerModel mangerModel) {
-		System.out.println("in controller constructor");
 		manger = new ManagerView();
 		model = mangerModel;
 		JButton addNewBook = manger.getOkButton();
@@ -32,116 +31,64 @@ public class ManagerController {
 		manger.cancelOrderBox.addActionListener(new CancelOrder());
 		manger.confirmOrderBox.addActionListener(new ConfirmOrder());
 		manger.newBook.btnUpdate.addActionListener(new ConfirmUpdateBook());
-		manger.addPublisherBtn.addActionListener(new AddPublisher());
 		fillComboBox(manger.cancelOrderBox);
 		fillComboBox(manger.confirmOrderBox);
 	}
-	
-	public void view()
-	{
+
+	public void view() {
 		manger.frame.setVisible(true);
 	}
 
-	public class AddPublisher implements ActionListener
-	{
+	public class ConfirmUpdateBook implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			JTextField name = new JTextField();
-			JTextField address = new JTextField();
-			JTextField phone = new JTextField();
-			
-			JPanel myPanel = new JPanel();
-			myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
-			myPanel.add(new JLabel("Name"));
-			myPanel.add(name);
-			//myPanel.add(Box.createHorizontalStrut(50)); // a spacer
-			//myPanel.add(Box.createVerticalStrut(100));
-			myPanel.add(new JLabel("Address"));
-			myPanel.add(address);
-			myPanel.add(new JLabel("Phone"));
-			myPanel.add(phone);
-			int result = JOptionPane.showConfirmDialog(null, myPanel, "Fill Author Data",
-					JOptionPane.OK_CANCEL_OPTION);
-			if (result == JOptionPane.OK_OPTION) {
-				String nameValue = null;
-				String phoneValue = null;
-				String addressValue = null;
-				if (name.getText() != null) {
-					nameValue = "\'" + name.getText() + "\'";
-				}
-				if (phone.getText() != null) {
-					phoneValue = "\'" + phone.getText() + "\'";
-				}
-				if (address.getText() != null) {
-					addressValue = "\'" + address.getText() + "\'";
-				}
-				model.addPublisher(nameValue, addressValue, phoneValue);
-			}
-
-		}
-			
-		}
-		
-	
-	public class ConfirmUpdateBook implements ActionListener
-	{
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			ArrayList<Object> attributes =  new ArrayList<Object>();
+			ArrayList<Object> attributes = new ArrayList<Object>();
 			ArrayList<Object> values = new ArrayList<Object>();
-			if(manger.getCategory() != null)
-			{
+			if (manger.getISBN() != null && manger.getISBN() != "") {
+				attributes.add("ISBN");
+				values.add(manger.getISBN());
+
+			}
+			if (manger.getCategory() != null && manger.getCategory().length() != 0) {
 				attributes.add("Category");
 				values.add(manger.getCategory());
 			}
-			if(manger.getISBN() != null)
-			{
-				attributes.add("ISBN");
-				values.add(manger.getISBN());
-				
-			}
-			if(manger.getPblisherName() != null)
-			{
+			if (manger.getPblisherName() != null && manger.getPblisherName().length() != 0) {
 				attributes.add("Publisher_Name");
 				values.add(manger.getPblisherName());
 			}
-			if(manger.getPrice() != null)
-			{
+			if (manger.getPrice() != null && manger.getPrice().length() != 0) {
 				attributes.add("Price");
 				values.add(manger.getPrice());
-				
+
 			}
-			if(manger.getPublicationYear() != null)
-			{
+			if (manger.getPublicationYear() != null && manger.getPublicationYear().length() != 0) {
 				attributes.add("Publication_Year");
 				values.add(manger.getPublicationYear());
-				
+
 			}
-			if(manger.getQuantity() != null)
-			{
+			if (manger.getQuantity() != null && manger.getQuantity().length() != 0) {
 				attributes.add("Quantity");
 				values.add(manger.getQuantity());
 			}
-			if(manger.getThreshold() != null)
-			{
+			if (manger.getThreshold() != null && manger.getThreshold().length() != 0) {
 				attributes.add("Threshold");
-			values.add(manger.getThreshold());
-				
+				values.add(manger.getThreshold());
+
 			}
-			if(manger.getTitle() != null)
-			{
+			if (manger.getTitle() != null && manger.getTitle().length() != 0) {
 				attributes.add("Title");
 				values.add(manger.getTitle());
-				
+
 			}
-		  model.modifyBook(attributes, values);
-		  manger.newBook.frame.setVisible(false);	
-			
+			model.modifyBook(attributes, values);
+			manger.newBook.frame.setVisible(false);
+
 		}
-		
+
 	}
+
 	public void fillComboBox(JComboBox box) {
 		HashMap<String, Integer> data = model.getOrders();
 		Set<String> keys = data.keySet();
@@ -158,9 +105,12 @@ public class ManagerController {
 			if (!selectedKey.equals("OrdersList")) {
 				HashMap<String, Integer> orders = model.getOrders();
 				Integer orderID = orders.get(selectedKey);
-				System.out.println(orderID);
-				model.cancelOrder(orderID);
-				manger.cancelOrderBox.removeItemAt(manger.cancelOrderBox.getSelectedIndex());
+				if (orderID != null) {
+					model.cancelOrder(orderID);
+					manger.confirmOrderBox.removeItemAt(manger.cancelOrderBox.getSelectedIndex());
+					manger.cancelOrderBox.removeItemAt(manger.cancelOrderBox.getSelectedIndex());
+				}
+				manger.cancelOrderBox.setSelectedIndex(0);
 			}
 		}
 
@@ -173,8 +123,12 @@ public class ManagerController {
 			if (!selectedKey.equals("OrdersList")) {
 				HashMap<String, Integer> orders = model.getOrders();
 				Integer orderID = orders.get(selectedKey);
-				model.confirmOrder(orderID);
-				manger.confirmOrderBox.removeItemAt(manger.confirmOrderBox.getSelectedIndex());
+				if (orderID != null) {
+					model.confirmOrder(orderID);
+					manger.cancelOrderBox.removeItemAt(manger.confirmOrderBox.getSelectedIndex());
+					manger.confirmOrderBox.removeItemAt(manger.confirmOrderBox.getSelectedIndex());
+				}
+				manger.confirmOrderBox.setSelectedIndex(0);
 			}
 		}
 	}
@@ -196,15 +150,17 @@ public class ManagerController {
 			if (result == JOptionPane.OK_OPTION) {
 				Integer quantityValue = null;
 				String IsbnValue = null;
-				if (quantity.getText() != null) {
+				if (quantity.getText() != null && quantity.getText().length() != 0) {
 					quantityValue = Integer.parseInt(quantity.getText());
 				}
-				if (isbn.getText() != null) {
+				if (isbn.getText() != null && isbn.getText().length() != 0) {
 					IsbnValue = "\'" + isbn.getText() + "\'";
 				}
-				model.placeOrder(quantityValue, IsbnValue);
-				fillComboBox(manger.cancelOrderBox);
-				fillComboBox(manger.confirmOrderBox);
+				boolean succeeded = model.placeOrder(quantityValue, IsbnValue);
+				if (succeeded) {
+					fillComboBox(manger.cancelOrderBox);
+					fillComboBox(manger.confirmOrderBox);
+				}
 			}
 
 		}
@@ -225,23 +181,20 @@ public class ManagerController {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			System.out.println("***************");
-			String[] authors;
-			ArrayList<String> authorList;
-
-			if (manger.getAuthors() != null) {
-				authors = (manger.getAuthors()).split(",");
-				authorList = new ArrayList<String>((Arrays.asList(authors)));
-			} else {
-				authorList = null;
-
-			}
-
-			model.addBook(manger.getCategory(), manger.getISBN(), manger.getPrice(), manger.getPublicationYear(),
-					manger.getPblisherName(), manger.getThreshold(), manger.getQuantity(), authorList,
+			model.addBook(manger.getCategory(), manger.getPrice(), manger.getPublicationYear(),
+					manger.getPblisherName(), manger.getThreshold(), manger.getQuantity(), manger.getAuthors(),
 					manger.getTitle());
 			manger.newBook.frame.setVisible(false);
 		}
+	}
+
+	public void navigateToMainPage() {
+		if (manger.frame != null)
+			manger.frame.setVisible(false);
+	}
+
+	public JButton mainPageBtn() {
+		return manger.mainPage;
 	}
 
 }

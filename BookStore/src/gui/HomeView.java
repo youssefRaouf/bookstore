@@ -52,13 +52,13 @@ public class HomeView {
 		panel.add(lblNewLabel);
 		
 		txtEmail = new JTextField();
-		txtEmail.setText("Email");
+		txtEmail.setText("email");
 		txtEmail.setBounds(52, 78, 114, 19);
 		panel.add(txtEmail);
 		txtEmail.setColumns(10);
 		
 		txtPassword = new JTextField();
-		txtPassword.setText("Password");
+		txtPassword.setText("password");
 		txtPassword.setBounds(52, 109, 114, 19);
 		panel.add(txtPassword);
 		txtPassword.setColumns(10);

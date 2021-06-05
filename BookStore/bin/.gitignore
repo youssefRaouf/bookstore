@@ -1,3 +1,13 @@
 /gui/
 /UserController$logoutListener.class
 /UserController$goBackToMainPage.class
+/UserController$checkoutListener.class
+/UserController$goToCheckoutListener.class
+/UserController$manageListener.class
+/ManagerController$ConfirmOrder$NewBookAddition.class
+/ManagerController$ConfirmOrder$PlaceOrder.class
+/ManagerController$ConfirmOrder$PromoteUser.class
+/ManagerController$NewBookAddition.class
+/ManagerController$PlaceOrder.class
+/ManagerController$PromoteUser.class
+/ManagerController$navigateToMainPage.class

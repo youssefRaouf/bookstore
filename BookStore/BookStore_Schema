@@ -42,7 +42,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`Book`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Book` (
-  `ISBN` VARCHAR(15) NOT NULL,
+  `ISBN` INT NOT NULL auto_increment,
   `Title` VARCHAR(15) NOT NULL,
   `Price` INT NOT NULL,
   `Category` VARCHAR(15) NOT NULL , 
@@ -74,7 +74,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `mydb`.`Manager_Order` (
   `no_of_copies` INT NOT NULL,
   `OrderID` INT NOT NULL AUTO_INCREMENT,
-  `Book_ISBN` VARCHAR(15) NOT NULL,
+  `Book_ISBN` INT NOT NULL,
   PRIMARY KEY (`OrderID`, `Book_ISBN`),
   INDEX `fk_Order_Book1_idx` (`Book_ISBN` ASC),
   CONSTRAINT `fk_Order_Book1`
@@ -106,10 +106,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Purchases` (
   `User_Email` VARCHAR(100) NOT NULL,
-  `Book_ISBN` VARCHAR(15) NOT NULL,
+  `Book_ISBN` INT NOT NULL,
   `no_of_copies` VARCHAR(45) NOT NULL,
-  `date` DATE NOT NULL,
-  PRIMARY KEY (`User_Email`, `Book_ISBN`),
+  `date` date NOT NULL,
   INDEX `fk_User_has_Book1_Book1_idx` (`Book_ISBN` ASC),
   INDEX `fk_User_has_Book1_User1_idx` (`User_Email` ASC),
   CONSTRAINT `fk_User_has_Book1_User1`
@@ -130,30 +129,31 @@ DELIMITER $$
 CREATE TRIGGER negative_constraint BEFORE update ON Book
 FOR EACH ROW BEGIN
    IF (NEW.Quantity < 0) THEN
-         CALL raise_error;-- raise an error
+         SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'there is no enough books remaining';
    END IF;
 END$$
 DELIMITER ;
 
 
 DELIMITER $$
--- checks if quantity is less than a threshold if it is then make an order for this book with a count of (threshold-new quantity+1)
+-- checks if quantity is less than a threshold if it is then make an order for this book with a count = threshold
 CREATE TRIGGER threshold AFTER update ON Book
 FOR EACH ROW BEGIN
    IF (NEW.Quantity < OLD.Threshold) THEN
          insert into mydb.Manager_Order (no_of_copies , Book_ISBN)
-         values(OLD.Threshold-NEW.Quantity+1 , OLD.ISBN);
+         values(OLD.Threshold , OLD.ISBN);
    END IF;
 END$$
 DELIMITER ;
 
 DELIMITER $$
--- checks if quantity is less than a threshold if it is then make an order for this book with a count of (threshold-new quantity+1)
+-- checks if quantity is less than a threshold if it is then make an order for this book with a count = threshold
 CREATE TRIGGER threshold1 AFTER insert ON Book
 FOR EACH ROW BEGIN
    IF (NEW.Quantity < new.Threshold) THEN
          insert into mydb.Manager_Order (no_of_copies , Book_ISBN)
-         values(NEW.Threshold-NEW.Quantity+1 , new.ISBN);
+         values(NEW.Threshold, new.ISBN);
    END IF;
 END$$
 DELIMITER ;
@@ -164,7 +164,8 @@ CREATE TRIGGER categoryDomain1 BEFORE insert ON Book
 FOR EACH ROW BEGIN
    IF (NEW.Category !='Science' and NEW.Category !='Art' and NEW.Category !='Religion' and 
    NEW.Category != 'History' and NEW.Category != 'Geography') THEN
-             CALL raise_error;
+             SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'only categories of Science,Art,Religion,History,Geography';
    END IF;
 END$$
 DELIMITER ;
@@ -176,8 +177,18 @@ CREATE TRIGGER categoryDomain2 BEFORE UPDATE ON Book
 FOR EACH ROW BEGIN
    IF (NEW.Category !='Science' and NEW.Category !='Art' and NEW.Category !='Religion' and 
    NEW.Category != 'History' and NEW.Category != 'Geography') THEN
-             CALL raise_error;
+               SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'only categories of Science,Art,Religion,History,Geography';
    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+-- decrease the quantity of the book when buying 
+CREATE TRIGGER buy BEFORE insert ON Purchases
+FOR EACH ROW BEGIN
+   update Book set Quantity = Book.Quantity - NEW.no_of_copies
+    where ISBN = NEW.Book_ISBN;
 END$$
 DELIMITER ;
 
@@ -187,7 +198,8 @@ CREATE TRIGGER EmailDomain BEFORE UPDATE ON User
 
 FOR EACH ROW BEGIN
    IF (NEW.Email NOT LIKE '%_@_%._%' ) THEN
-             CALL raise_error;
+              SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'not valid email';
    END IF;
 END$$
 DELIMITER ;
@@ -198,7 +210,8 @@ CREATE TRIGGER EmailDomain1 BEFORE insert ON User
 
 FOR EACH ROW BEGIN
    IF (NEW.Email NOT LIKE '%_@_%._%' ) THEN
-             CALL raise_error;
+               SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'not valid email';
    END IF;
 END$$
 DELIMITER ;
@@ -225,37 +238,32 @@ DELIMITER ;
 insert into Author values('1','youssef raouf');
 insert into Author values('2','ahmed hamdy'); 
 
-insert into Book values('1' ,'book1',100,'Art', '2021-01-01',10,3 ,'youssef',1);
-insert into Book values('2' ,'book2',200,'Art', '2021-01-01',10,4 ,'youssef',1);
-insert into Book values('3' ,'book3',300,'Art', '2021-01-01',10,5 ,'youssef',1);
-insert into Book values('4' ,'book4',400,'Art', '2021-01-01',10,6 ,'youssef',1);
-insert into Book values('5' ,'book5',500,'Art', '2021-01-01',20,7 ,'youssef',1);
-insert into Book values('6' ,'book6',600,'Art', '2021-01-01',20,8 ,'youssef',2);
-insert into Book values('7' ,'book7',700,'Art', '2021-01-01',20,5 ,'youssef',2);
-insert into Book values('8' ,'book8',800,'Art', '2021-01-01',20,6 ,'youssef',2);
-insert into Book values('9' ,'book9',900,'Art', '2021-01-01',20,3 ,'youssef',2);
-insert into Book values('10' ,'book10',1000,'Art', '2021-01-01',20,4 ,'youssef',2);
-insert into Book values('11' ,'book11',1100,'Art', '2021-01-01',20,5 ,'youssef',2);
-insert into Book values('12' ,'book12',1200,'Art', '2021-01-01',20,6 ,'youssef',2);
-
+insert into Book values(1,'book1',100,'Art', '2021-01-01',10,3 ,'youssef',1);
+insert into Book values(2,'book2',200,'Art', '2021-01-01',10,4 ,'youssef',1);
+insert into Book values(3,'book3',300,'Art', '2021-01-01',10,5 ,'youssef',1);
+insert into Book values(4,'book4',400,'Art', '2021-01-01',10,6 ,'youssef',1);
+insert into Book values(5,'book5',500,'Art', '2021-01-01',20,7 ,'youssef',1);
+insert into Book values(6,'book6',600,'Art', '2021-01-01',20,8 ,'youssef',2);
+insert into Book values(7,'book7',700,'Art', '2021-01-01',20,5 ,'youssef',2);
+insert into Book values(8,'book8',800,'Art', '2021-01-01',20,6 ,'youssef',2);
+insert into Book values(9,'book9',900,'Art', '2021-01-01',20,3 ,'youssef',2);
+insert into Book values(10,'book10',1000,'Art', '2021-01-01',20,4 ,'youssef',2);
+insert into Book values(11,'book11',1100,'Art', '2021-01-01',20,5 ,'youssef',2);
+insert into Book values(12,'book12',1200,'Art', '2021-01-01',20,600,'youssef',2);
 
 insert into User values ('youssef','youssef','raouf','you@gmail.com','000','000000','address','manager');
 insert into User values ('abdelrahman','abdelrahman','nour','abdelrahman271@gmail.com','000','000000','address','user');
 insert into User values ('abdelrahman','abdelrahman','hagrass','bodyhagrass@gmail.com','000','000000','address','user');
 insert into User values ('ahmed','ahmed','hamdy','ahmedradwan111111@gmail.com','000','000000','address','user');
 
-
-insert into Purchases values  ('you@gmail.com' ,'2' ,150 ,'2021-06-02') ;
-insert into Purchases values  ('you@gmail.com' ,'3' ,10 ,'2021-06-02') ;
-insert into Purchases values  ('you@gmail.com' ,'1' ,20 ,'2021-06-02') ;
+insert into Purchases values  ('you@gmail.com' ,'2' ,2 ,'2021-06-02') ;
+insert into Purchases values  ('you@gmail.com' ,'3' ,2 ,'2021-06-02') ;
+insert into Purchases values  ('you@gmail.com' ,'1' ,2 ,'2021-06-02') ;
 insert into Purchases values  ('abdelrahman271@gmail.com' ,'1' ,1 ,'2021-06-02') ;
 insert into Purchases values  ('abdelrahman271@gmail.com' ,'2' ,2 ,'2021-06-02') ;
 insert into Purchases values  ('abdelrahman271@gmail.com' ,'3' ,3 ,'2021-06-02') ;
-insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'1' ,300 ,'2021-06-02') ; 
-insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'2' ,1 ,'2021-06-02') ; 
-insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'3' ,1 ,'2021-06-02') ; 
-insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'4' ,1 ,'2021-06-02') ; 
- 
+insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'10' ,1 ,'2021-06-02') ; 
+insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'9' ,1 ,'2021-06-02') ; 
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

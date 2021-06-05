@@ -23,9 +23,10 @@ import java.awt.event.ActionEvent;
 public class ShoppingCartContents {
 
 	public JFrame frame;
-	public ArrayList<String> items;
+	public ArrayList<ArrayList<String>> items;
 	public JLabel label;
 	public JButton btnRemove;
+	public JButton checkOutButton;
 	public JList list;
 	public JButton mainPage;
 
@@ -37,7 +38,7 @@ public class ShoppingCartContents {
 		initialize();
 	}
 
-	public ShoppingCartContents(ArrayList<String> arrayList) {
+	public ShoppingCartContents(ArrayList<ArrayList<String>> arrayList) {
 		this.items = arrayList;
 		initialize();
 	}
@@ -62,7 +63,7 @@ public class ShoppingCartContents {
 		label.setBounds(134, 235, 95, 20);
 		p.add(label);
 
-		JButton checkOutButton = new JButton("Check Out");
+		checkOutButton = new JButton("Check Out");
 		checkOutButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		checkOutButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -87,6 +88,18 @@ public class ShoppingCartContents {
 
 	public JFrame getFrame() {
 		return frame;
+	}
+	
+	public void setList (ArrayList<ArrayList<String>> newData) {
+		ArrayList<String> data = new ArrayList<String>();
+		int totalPrice = 0;
+		for(int i=0;i<newData.size();i++) {
+				ArrayList<String> temp = newData.get(i);
+				data.add("ISBN: "+temp.get(4)+",  Title: "+ temp.get(0)+",   Price: "+temp.get(1)+",   Quantity: "+temp.get(5));
+				totalPrice += Integer.parseInt(temp.get(1))* Integer.parseInt(temp.get(5));
+		}
+		list.setListData(data.toArray());
+		label.setText(Integer.toString(totalPrice));
 	}
 
 }
