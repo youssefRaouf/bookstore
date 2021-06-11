@@ -22,7 +22,7 @@ public class UserModel {
 
 		}
 	}
-	
+
 	/*
 	 * add new user in the database
 	 */
@@ -40,7 +40,7 @@ public class UserModel {
 			bookStore.statement = bookStore.connect.createStatement();
 			bookStore.statement.executeUpdate(query);
 		} catch (Exception e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "signing up failed with error message: " + e.getMessage());
 			return false;
 		}
 		return true;
@@ -69,7 +69,6 @@ public class UserModel {
 		}
 		return null;
 	}
-
 
 	/*
 	 * store the result of research in HashMap < isbn,arraylist<string>>
@@ -106,21 +105,21 @@ public class UserModel {
 		}
 	}
 
-
 	public void checkout(ArrayList<ArrayList<String>> items, String email) {
 		for (int i = 0; i < items.size(); i++) {
 			LocalDate myObj = LocalDate.now();
 			String query = "insert into" + " Purchases values (" + email + " ," + items.get(i).get(4) + " ,"
-					+ items.get(i).get(5)+" ,"+"'"+myObj+"'"+")";
+					+ items.get(i).get(5) + " ," + "'" + myObj + "'" + ")";
 			System.out.println(query);
 			try {
 				bookStore.statement = bookStore.connect.createStatement();
 				int l = bookStore.statement.executeUpdate(query);
 			} catch (SQLException e) {
-				 JOptionPane.showMessageDialog(null, "book with isbn "+ items.get(i).get(4)+" have no enough copies so you are unable to buy it");
+				JOptionPane.showMessageDialog(null,
+						"book with isbn " + items.get(i).get(4) + " have no enough copies so you are unable to buy it");
 			}
 		}
-		 JOptionPane.showMessageDialog(null, "books bought successfully we will head you back to main page");
+		JOptionPane.showMessageDialog(null, "books bought successfully we will head you back to main page");
 	}
 
 	public void setEmail(String email) {
