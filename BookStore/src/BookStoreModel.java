@@ -29,8 +29,8 @@ public class BookStoreModel {
 	public ResultSet resultSet = null;
 
 	final private String host = "127.0.0.1";
-	final private String user = "youyou";
-	final private String password = "youyou";
+	final private String user = "abdelrahman";
+	final private String password = "82428242aA@";
 	final public String database = "book_store";
 
 	public void connectToDB() throws Exception {
