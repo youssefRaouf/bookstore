@@ -233,12 +233,12 @@ public class UserController<SearchResults> {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (access.equals("manager"))
+			if (access.equals("manager")) {
 				manager.manger.frame.setVisible(true);
-			else {
+				mainPage.getFrame().setVisible(false);
+			} else {
 				JOptionPane.showMessageDialog(null, "you are not a manager!");
 			}
-			mainPage.getFrame().setVisible(false);
 		}
 
 	}
