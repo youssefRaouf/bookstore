@@ -74,7 +74,7 @@ public class UserController<SearchResults> {
 			}
 			access = manger.login(password, email);
 			if (access == null) {
-				JOptionPane.showMessageDialog(null, "wrong Email or password !", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "wrong Email or password !");
 			} else if (access.equals("user")) {
 				mainPage.setAccess("user");
 				user = (UserModel) manger;
@@ -287,7 +287,8 @@ public class UserController<SearchResults> {
 			if (checkoutPage.getFrame() != null) {
 				checkoutPage.getFrame().setVisible(false);
 			}
-			manager.navigateToMainPage();
+			if(manger != null && manager != null)
+				manager.navigateToMainPage();
 			mainPage.getFrame().setVisible(true);
 		} catch (Error e) {
 

@@ -11,3 +11,4 @@
 /ManagerController$PlaceOrder.class
 /ManagerController$PromoteUser.class
 /ManagerController$navigateToMainPage.class
+*.class

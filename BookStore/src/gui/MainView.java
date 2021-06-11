@@ -272,5 +272,6 @@ public class MainView {
 		btnGo = new JButton("GO");
 		btnGo.setBounds(270, 423, 117, 25);
 		frame.getContentPane().add(btnGo);
+		frame.getContentPane().add(btnManager);
 	}
 }
