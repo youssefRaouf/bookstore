@@ -31,7 +31,7 @@ public class BookStoreModel {
 	final private String host = "127.0.0.1";
 	final private String user = "youyou";
 	final private String password = "youyou";
-	final public String database = "mydb";
+	final public String database = "book_store";
 
 	public void connectToDB() throws Exception {
 		try {

@@ -117,7 +117,7 @@ public class UserModel {
 				bookStore.statement = bookStore.connect.createStatement();
 				int l = bookStore.statement.executeUpdate(query);
 			} catch (SQLException e) {
-				 JOptionPane.showMessageDialog(null, "book with isbn "+ items.get(i).get(4)+" have no enough copies so you are enable to buy it");
+				 JOptionPane.showMessageDialog(null, "book with isbn "+ items.get(i).get(4)+" have no enough copies so you are unable to buy it");
 			}
 		}
 		 JOptionPane.showMessageDialog(null, "books bought successfully we will head you back to main page");
