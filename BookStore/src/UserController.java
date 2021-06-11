@@ -119,14 +119,9 @@ public class UserController<SearchResults> {
 					: "'" + signUp.getPassword().getText() + "'";
 			boolean valid = user.signUp(user_name, first_name, last_name, email, password, phone_number,
 					shipping_address, "'user'");
-			if (!valid) {
-
-				JOptionPane.showMessageDialog(null, "Wrong data!", "Error", JOptionPane.ERROR_MESSAGE);
-
-			} else {
+			if (valid) {
 				signUp.getFrame().setVisible(false);
 				mainPage.view();
-
 			}
 		}
 	}
@@ -241,8 +236,7 @@ public class UserController<SearchResults> {
 			if (access.equals("manager"))
 				manager.manger.frame.setVisible(true);
 			else {
-
-				JOptionPane.showMessageDialog(null, "you are not a manager!", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "you are not a manager!");
 			}
 			mainPage.getFrame().setVisible(false);
 		}
@@ -287,7 +281,7 @@ public class UserController<SearchResults> {
 			if (checkoutPage.getFrame() != null) {
 				checkoutPage.getFrame().setVisible(false);
 			}
-			if(manger != null && manager != null)
+			if (manger != null && manager != null)
 				manager.navigateToMainPage();
 			mainPage.getFrame().setVisible(true);
 		} catch (Error e) {
