@@ -30,14 +30,12 @@ public class ManagerController {
 		report.managerPage.addActionListener(new goBackToManager());
 		manger.promoteButton.addActionListener(new PromoteUser());
 		manger.placeOderButton.addActionListener(new PlaceOrder());
-		manger.cancelOrderBox.addActionListener(new CancelOrder());
 		manger.confirmOrderBox.addActionListener(new ConfirmOrder());
 		manger.newBook.btnUpdate.addActionListener(new ConfirmUpdateBook());
 		System.out.println(manger.getReportOneButton);
 		manger.getReportOneButton.addActionListener(new ViewReport1());
 		manger.getReportTwoButton.addActionListener(new ViewReport2());
 		manger.getReportThreeButton.addActionListener(new ViewReport3());
-		fillComboBox(manger.cancelOrderBox);
 		fillComboBox(manger.confirmOrderBox);
 	}
 
@@ -104,24 +102,6 @@ public class ManagerController {
 		}
 	}
 
-	public class CancelOrder implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String selectedKey = (String) manger.cancelOrderBox.getSelectedItem();
-			if (!selectedKey.equals("OrdersList")) {
-				HashMap<String, Integer> orders = model.getOrders();
-				Integer orderID = orders.get(selectedKey);
-				if (orderID != null) {
-					model.cancelOrder(orderID);
-					manger.confirmOrderBox.removeItemAt(manger.cancelOrderBox.getSelectedIndex());
-					manger.cancelOrderBox.removeItemAt(manger.cancelOrderBox.getSelectedIndex());
-				}
-				manger.cancelOrderBox.setSelectedIndex(0);
-			}
-		}
-
-	}
-
 	public class ConfirmOrder implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -131,7 +111,6 @@ public class ManagerController {
 				Integer orderID = orders.get(selectedKey);
 				if (orderID != null) {
 					model.confirmOrder(orderID);
-					manger.cancelOrderBox.removeItemAt(manger.confirmOrderBox.getSelectedIndex());
 					manger.confirmOrderBox.removeItemAt(manger.confirmOrderBox.getSelectedIndex());
 				}
 				manger.confirmOrderBox.setSelectedIndex(0);
@@ -164,7 +143,6 @@ public class ManagerController {
 				}
 				boolean succeeded = model.placeOrder(quantityValue, IsbnValue);
 				if (succeeded) {
-					fillComboBox(manger.cancelOrderBox);
 					fillComboBox(manger.confirmOrderBox);
 				}
 			}

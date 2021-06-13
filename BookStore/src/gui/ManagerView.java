@@ -31,7 +31,6 @@ public class ManagerView {
 	public JButton getReportThreeButton;
 	
 	public JButton mainPage;
-	public JComboBox cancelOrderBox;
 	public JComboBox confirmOrderBox;
 
 	/**
@@ -143,26 +142,12 @@ public class ManagerView {
 		lblManagerPrivilage.setBackground(Color.BLACK);
 		lblManagerPrivilage.setBounds(132, 9, 217, 15);
 		frame.getContentPane().add(lblManagerPrivilage);
-		
-		
-	
-		cancelOrderBox = new JComboBox();
-		cancelOrderBox.setBounds(314, 87, 200, 30);
-		frame.getContentPane().add(cancelOrderBox);
-		
-		JLabel lblCancelOrder = new JLabel("Cancel Order ");
-		lblCancelOrder.setBounds(232, 87, 89, 20);
-		frame.getContentPane().add(lblCancelOrder);
-		
 		JLabel lblConfirmOrder = new JLabel("Confirm Order ");
 		lblConfirmOrder.setBounds(232, 137, 89, 20);
 		frame.getContentPane().add(lblConfirmOrder);
-		
 		confirmOrderBox = new JComboBox();
 		confirmOrderBox.setBounds(314, 139, 200, 30);
 		confirmOrderBox.addItem("OrdersList");
-		cancelOrderBox.addItem("OrdersList");
-
 		frame.getContentPane().add(confirmOrderBox);
 	}
 
