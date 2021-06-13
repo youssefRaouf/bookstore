@@ -27,9 +27,7 @@ public class ManagerController {
 		model = mangerModel;
 		JButton addNewBook = manger.getOkButton();
 		addNewBook.addActionListener(new NewBookAddition());
-		
-
-		
+		report.managerPage.addActionListener(new goBackToManager());
 		manger.promoteButton.addActionListener(new PromoteUser());
 		manger.placeOderButton.addActionListener(new PlaceOrder());
 		manger.cancelOrderBox.addActionListener(new CancelOrder());
@@ -37,8 +35,8 @@ public class ManagerController {
 		manger.newBook.btnUpdate.addActionListener(new ConfirmUpdateBook());
 		System.out.println(manger.getReportOneButton);
 		manger.getReportOneButton.addActionListener(new ViewReport1());
-		manger.getReportTwoButton.addActionListener( new ViewReport2() );
-		manger.getReportThreeButton.addActionListener( new ViewReport3() );
+		manger.getReportTwoButton.addActionListener(new ViewReport2());
+		manger.getReportThreeButton.addActionListener(new ViewReport3());
 		fillComboBox(manger.cancelOrderBox);
 		fillComboBox(manger.confirmOrderBox);
 	}
@@ -204,7 +202,7 @@ public class ManagerController {
 	public JButton mainPageBtn() {
 		return manger.mainPage;
 	}
-	
+
 	public class ViewReport1 implements ActionListener {
 
 		@Override
@@ -214,6 +212,7 @@ public class ManagerController {
 			manger.getFrame().setVisible(false);
 		}
 	}
+
 	public class ViewReport2 implements ActionListener {
 
 		@Override
@@ -223,6 +222,7 @@ public class ManagerController {
 			manger.getFrame().setVisible(false);
 		}
 	}
+
 	public class ViewReport3 implements ActionListener {
 
 		@Override
@@ -230,6 +230,15 @@ public class ManagerController {
 			report.setList(model.ManagerReport_top10_selling());
 			report.getFrame().setVisible(true);
 			manger.getFrame().setVisible(false);
+		}
+	}
+	
+	public class goBackToManager implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			report.getFrame().setVisible(false);
+			manger.getFrame().setVisible(true);
 		}
 	}
 

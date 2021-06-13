@@ -103,7 +103,6 @@ public class UserController<SearchResults> {
 		public void actionPerformed(ActionEvent arg0) {
 
 			user = (UserModel) manger;
-			mainPage.setAccess("user");
 			String user_name = signUp.getUser_name().getText().length() == 0 ? null
 					: "'" + signUp.getUser_name().getText() + "'";
 			String last_name = signUp.getLast_name().getText().length() == 0 ? null
@@ -120,7 +119,12 @@ public class UserController<SearchResults> {
 			boolean valid = user.signUp(user_name, first_name, last_name, email, password, phone_number,
 					shipping_address, "'user'");
 			if (valid) {
+				manger.login(password, email);
+				access = "user";
+				mainPage.setAccess("user");
+				user = (UserModel) manger;
 				signUp.getFrame().setVisible(false);
+				mainPage.getFrame().setVisible(true);
 				mainPage.view();
 			}
 		}

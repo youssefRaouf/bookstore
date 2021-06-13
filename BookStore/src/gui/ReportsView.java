@@ -13,7 +13,9 @@ import javax.swing.event.ListSelectionListener;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
+import java.awt.Insets;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -25,7 +27,7 @@ public class ReportsView {
 	public JList list;
 	public JFrame frame;
 	public ArrayList<ArrayList<String>> items;
-	
+	public JButton managerPage;
 	public ReportsView() {
 		items = new ArrayList();
 		initialize();
@@ -39,18 +41,18 @@ public class ReportsView {
 		frame = new JFrame("frame");
 
 		// create a panel
-		JPanel p = new JPanel();
-
-		JLabel lblTotalPrice = new JLabel("Total Price");
-		lblTotalPrice.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lblTotalPrice.setBounds(0, 224, 124, 37);
-		p.add(lblTotalPrice);
-		
+		JPanel p = new JPanel();		
 		list = new JList(items.toArray());
 		list.setBounds(0,0, 1000,1000);
 		p.add(list);
+		managerPage = new JButton("go back to Manager Page");
+		GridBagConstraints gbc_btnOk = new GridBagConstraints();
+		gbc_btnOk.insets = new Insets(0, 0, 0, 5);
+		gbc_btnOk.gridx = 3;
+		gbc_btnOk.gridy = 10;
+		p.add(managerPage,gbc_btnOk);
 		frame.add(p);
-		frame.setSize(1000, 1000);
+		frame.setSize(700, 700);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
 	
@@ -61,13 +63,10 @@ public class ReportsView {
 	//needs to be editied
 	public void setList (ArrayList<String> newData) {
 		ArrayList<String> data = new ArrayList<String>();
-		int totalPrice = 0;
 		for(int i=0;i<newData.size();i++) {
-				//ArrayList<String> temp = newData.get(i);
-				data.add(newData.get(i));
-				//totalPrice += Integer.parseInt(temp.get(1))* Integer.parseInt(temp.get(5));
+				data.add(newData.get(i));	
 		}
 		list.setListData(data.toArray());
-		//label.setText(Integer.toString(totalPrice));
+		
 	}
 }

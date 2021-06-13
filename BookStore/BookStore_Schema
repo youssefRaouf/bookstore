@@ -253,20 +253,3 @@ insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'10' ,1 ,'2021-05-
 insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'13' ,3 ,'2021-05-02') ; 
 insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'10' ,1 ,'2021-06-02') ; 
 insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'9' ,1 ,'2021-06-02') ; 
-
-
-SELECT sum(no_of_copies) as sales FROM Purchases WHERE MONTH( date ) = MONTH( curdate() ) -1 ;
-
-SELECT User_Email , sum(no_of_copies) 
-FROM Purchases
-WHERE ( MONTH( date ) >= MONTH( curdate() )-3 ) AND ( MONTH( date ) < MONTH( curdate() ) ) AND ( YEAR(date()) = YEAR(curdate()) )
-GROUP BY User_Email 
-ORDER BY sum(no_of_copies) DESC LIMIT 5;
-
-SELECT Book_ISBN , sum(no_of_copies) 
-FROM Purchases
-WHERE ( MONTH( date ) >= MONTH( curdate() )-3 ) AND ( MONTH( date ) < MONTH( curdate() ) ) AND ( YEAR(date()) = YEAR(curdate()) ) 
-GROUP BY Book_ISBN
-ORDER BY sum(no_of_copies) DESC LIMIT 10;
-
-

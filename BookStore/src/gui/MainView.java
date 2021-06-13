@@ -169,6 +169,8 @@ public class MainView {
 		this.access = access;
 		 if (access.equals("manager")){
 			 	frame.getContentPane().add(btnManager);
+			 }else {
+				 frame.getContentPane().remove(btnManager);
 			 }
 		
 	}
@@ -272,6 +274,6 @@ public class MainView {
 		btnGo = new JButton("GO");
 		btnGo.setBounds(270, 423, 117, 25);
 		frame.getContentPane().add(btnGo);
-		frame.getContentPane().add(btnManager);
+//		frame.getContentPane().add(btnManager);
 	}
 }

@@ -104,7 +104,7 @@ public class ManagerView {
 		modifyBook.setBounds(232, 36, 157, 25);
 		frame.getContentPane().add(modifyBook);
 //*************************************************************************************		
-		getReportOneButton = new JButton("Get Report 1");
+		getReportOneButton = new JButton("Total Sales");
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -114,7 +114,7 @@ public class ManagerView {
 		getReportOneButton.setBounds(8, 209, 161, 25);
 		frame.getContentPane().add(getReportOneButton);
 		
-		getReportTwoButton = new JButton("Get Report 2");
+		getReportTwoButton = new JButton("Top 5");
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -124,7 +124,7 @@ public class ManagerView {
 		getReportTwoButton.setBounds(6, 245, 163, 25);
 		frame.getContentPane().add(getReportTwoButton);
 		
-		getReportThreeButton = new JButton("Get Report 3");
+		getReportThreeButton = new JButton("Top 10 selling");
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 

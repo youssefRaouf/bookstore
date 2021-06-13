@@ -57,17 +57,16 @@ public class UserModel {
 			System.out.println(query);
 			bookStore.statement = bookStore.connect.createStatement();
 			bookStore.resultSet = bookStore.statement.executeQuery(query);
-
+			String access = "user";
 			while (bookStore.resultSet.next()) {
-
-				this.email = "'" + bookStore.resultSet.getString("Email") + "'";
-				return bookStore.resultSet.getString("access");
+				access = bookStore.resultSet.getString("access");
 			}
+			this.email = email;
+			return access;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-		return null;
 	}
 
 	/*
@@ -126,5 +125,3 @@ public class UserModel {
 		this.email = email;
 	}
 }
-
-

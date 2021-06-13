@@ -183,7 +183,7 @@ public class ManagerModel extends UserModel {
 			while (result.next()) {
 				int no_of_copies = result.getInt("sum(no_of_copies)");
 				String Book_ISBN = result.getString("Book_ISBN");
-				String data = "User: " + Book_ISBN + "  Copies: " + no_of_copies;
+				String data = "Book_ISBN: " + Book_ISBN + "  Copies: " + no_of_copies;
 				Tuples.add(data);
 			}
 		} catch (SQLException e) {
