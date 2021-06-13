@@ -234,6 +234,8 @@ insert into Book values(9,'book9',900,'Art', '2021-01-01',20,3 ,'youssef',2);
 insert into Book values(10,'book10',1000,'Art', '2021-01-01',20,4 ,'youssef',2);
 insert into Book values(11,'book11',1100,'Art', '2021-01-01',20,5 ,'youssef',2);
 insert into Book values(12,'book12',1200,'Art', '2021-01-01',20,600,'youssef',2);
+insert into Book values(13,'book13',900,'Art', '2021-01-01',20,6 ,'youssef',2);
+insert into Book values(14,'book14',900,'Art', '2021-01-01',20,3 ,'youssef',2);
 
 insert into User values ('youssef','youssef','raouf','you@gmail.com','000','000000','address','manager');
 insert into User values ('abdelrahman','abdelrahman','nour','abdelrahman271@gmail.com','000','000000','address','user');
@@ -246,6 +248,25 @@ insert into Purchases values  ('you@gmail.com' ,'1' ,2 ,'2021-06-02') ;
 insert into Purchases values  ('abdelrahman271@gmail.com' ,'1' ,1 ,'2021-06-02') ;
 insert into Purchases values  ('abdelrahman271@gmail.com' ,'2' ,2 ,'2021-06-02') ;
 insert into Purchases values  ('abdelrahman271@gmail.com' ,'3' ,3 ,'2021-06-02') ;
+insert into Purchases values  ('abdelrahman271@gmail.com' ,'13' ,3 ,'2021-05-02') ;
+insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'10' ,1 ,'2021-05-02') ; 
+insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'13' ,3 ,'2021-05-02') ; 
 insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'10' ,1 ,'2021-06-02') ; 
 insert into Purchases values  ('ahmedradwan111111@gmail.com' ,'9' ,1 ,'2021-06-02') ; 
+
+
+SELECT sum(no_of_copies) as sales FROM Purchases WHERE MONTH( date ) = MONTH( curdate() ) -1 ;
+
+SELECT User_Email , sum(no_of_copies) 
+FROM Purchases
+WHERE ( MONTH( date ) >= MONTH( curdate() )-3 ) AND ( MONTH( date ) < MONTH( curdate() ) ) AND ( YEAR(date()) = YEAR(curdate()) )
+GROUP BY User_Email 
+ORDER BY sum(no_of_copies) DESC LIMIT 5;
+
+SELECT Book_ISBN , sum(no_of_copies) 
+FROM Purchases
+WHERE ( MONTH( date ) >= MONTH( curdate() )-3 ) AND ( MONTH( date ) < MONTH( curdate() ) ) AND ( YEAR(date()) = YEAR(curdate()) ) 
+GROUP BY Book_ISBN
+ORDER BY sum(no_of_copies) DESC LIMIT 10;
+
 

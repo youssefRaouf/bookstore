@@ -35,10 +35,12 @@ public class UserController<SearchResults> {
 		search = new SearchDisplayer();
 		checkoutPage = new CheckoutView();
 		checkoutPage.btnOk.addActionListener(new checkoutListener());
+		
 		cart = new ShoppingCartContents();
 		cart.btnRemove.addActionListener(new RemoveItem());
 		cart.checkOutButton.addActionListener(new goToCheckoutListener());
 		cart.mainPage.addActionListener(new goBackToMainPage());
+		
 		checkoutPage.mainPage.addActionListener(new goBackToMainPage());
 		JButton login = home.getLogin();
 		login.addActionListener(new SignInListener());
@@ -155,6 +157,8 @@ public class UserController<SearchResults> {
 			mainPage.getFrame().setVisible(false);
 		}
 	}
+	
+
 
 	public class logoutListener implements ActionListener {
 
@@ -233,6 +237,7 @@ public class UserController<SearchResults> {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			System.out.println(access.equals("manager"));
 			if (access.equals("manager"))
 				manager.manger.frame.setVisible(true);
 			else {

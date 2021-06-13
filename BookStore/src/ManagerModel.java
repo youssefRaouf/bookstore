@@ -131,4 +131,64 @@ public class ManagerModel extends UserModel {
 		}
 
 	}
+	public ArrayList<String> ManagerReport_Total_Sales() {
+		int sales = 0;
+		String sql = "SELECT sum(no_of_copies) as sales FROM Purchases WHERE MONTH( date ) = MONTH( curdate() ) -1 AND (year(date) = year(curdate())) ;";
+		ArrayList<String> Tuples = new ArrayList<>();
+		
+		try {
+			ResultSet result = stmt.executeQuery(sql);
+		
+			while (result.next()) {
+				sales = result.getInt("sales");
+				String s = "Sales: " + sales ;
+				Tuples.add(s);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return Tuples;
+
+		
+	}
+	public ArrayList<String> ManagerReport_Top5() {
+		String sql = "SELECT User_Email , sum(no_of_copies) \n" + 
+				"FROM Purchases\n" + 
+				"WHERE ( MONTH( date ) >= MONTH( curdate() )-3 ) AND ( MONTH( date ) < MONTH( curdate() ) ) AND (year(date) = year(curdate())) \n" + 
+				"GROUP BY User_Email \n" + 
+				"ORDER BY sum(no_of_copies) DESC LIMIT 5;";
+		ArrayList<String> Tuples = new ArrayList<String>();
+		try {
+			ResultSet result = stmt.executeQuery(sql);
+			while (result.next()) {
+				int purchaseAmount = result.getInt("sum(no_of_copies)");
+				String user = result.getString("User_Email");
+				String data = "User: " + user + "  Purchase Amount: " + purchaseAmount;
+				Tuples.add(data);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return Tuples;
+	}
+	public ArrayList<String> ManagerReport_top10_selling() {
+		String sql = "SELECT Book_ISBN , sum(no_of_copies) \n" + 
+				"FROM Purchases\n" + 
+				"WHERE ( MONTH( date ) >= MONTH( curdate() )-3 ) AND ( MONTH( date ) < MONTH( curdate() ) ) AND (year(date) = year(curdate())) \n" + 
+				"GROUP BY Book_ISBN\n" + 
+				"ORDER BY sum(no_of_copies) DESC LIMIT 10;";
+		ArrayList<String> Tuples = new ArrayList<String>();
+		try {
+			ResultSet result = stmt.executeQuery(sql);
+			while (result.next()) {
+				int no_of_copies = result.getInt("sum(no_of_copies)");
+				String Book_ISBN = result.getString("Book_ISBN");
+				String data = "User: " + Book_ISBN + "  Copies: " + no_of_copies;
+				Tuples.add(data);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return Tuples;
+	}
 }

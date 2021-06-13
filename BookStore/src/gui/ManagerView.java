@@ -18,12 +18,18 @@ import javax.swing.JList;
 import javax.swing.JComboBox;
 import javax.swing.JMenuBar;
 
+
 public class ManagerView {
 
 	public JFrame frame;
 	public NewBookView newBook = new NewBookView();
 	public JButton promoteButton;
 	public JButton placeOderButton;
+	
+	public JButton getReportOneButton;
+	public JButton getReportTwoButton;
+	public JButton getReportThreeButton;
+	
 	public JButton mainPage;
 	public JComboBox cancelOrderBox;
 	public JComboBox confirmOrderBox;
@@ -97,7 +103,38 @@ public class ManagerView {
 		});
 		modifyBook.setBounds(232, 36, 157, 25);
 		frame.getContentPane().add(modifyBook);
+//*************************************************************************************		
+		getReportOneButton = new JButton("Get Report 1");
+		addButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 
+			}
+
+		});
+		getReportOneButton.setBounds(8, 209, 161, 25);
+		frame.getContentPane().add(getReportOneButton);
+		
+		getReportTwoButton = new JButton("Get Report 2");
+		addButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+			}
+
+		});
+		getReportTwoButton.setBounds(6, 245, 163, 25);
+		frame.getContentPane().add(getReportTwoButton);
+		
+		getReportThreeButton = new JButton("Get Report 3");
+		addButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+			}
+
+		});
+		getReportThreeButton.setBounds(4, 281, 165, 25);
+		frame.getContentPane().add(getReportThreeButton);
+//*************************************************************************************	
+		//mainPage.setBounds(10, 173, 159, 25);
 		mainPage = new JButton("go back to main page");
 		mainPage.setBounds(10, 173, 159, 25);
 		frame.getContentPane().add(mainPage);
@@ -107,6 +144,8 @@ public class ManagerView {
 		lblManagerPrivilage.setBounds(132, 9, 217, 15);
 		frame.getContentPane().add(lblManagerPrivilage);
 		
+		
+	
 		cancelOrderBox = new JComboBox();
 		cancelOrderBox.setBounds(314, 87, 200, 30);
 		frame.getContentPane().add(cancelOrderBox);
@@ -213,5 +252,8 @@ public class ManagerView {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	public JFrame getFrame() {
+		return frame;
 	}
 }
