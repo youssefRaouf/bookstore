@@ -13,7 +13,6 @@ import java.sql.Statement;
 public class ManagerModel extends UserModel {
 
 	Statement stmt;
-	// Connection connect;
 
 	public ManagerModel() {
 		super();
@@ -105,17 +104,6 @@ public class ManagerModel extends UserModel {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(null, "order confirm failed with error message: " + e.getMessage());
-		}
-	}
-
-	public void cancelOrder(int orderNumber) {
-		String deleteOrder = "Delete from Manager_Order where OrderID = " + orderNumber;
-		try {
-			stmt.executeUpdate(deleteOrder);
-			JOptionPane.showMessageDialog(null, "deleting order succeeded");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			JOptionPane.showMessageDialog(null, "deleting order failed with error message: " + e.getMessage());
 		}
 	}
 
